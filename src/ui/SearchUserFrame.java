@@ -83,7 +83,6 @@ public class SearchUserFrame extends JFrame {
 			if (reply == JOptionPane.YES_OPTION){
 				System.out.println("YESSS");
 				SingleClient.sent(new Info("request", currentUser.getAccount(), user.getAccount()));
-				ContactList.getCurrentContentList().loadFriendList();
 			}
 		}
 	}

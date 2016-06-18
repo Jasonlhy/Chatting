@@ -28,13 +28,14 @@ new FormModel {
 				name: "panel2"
 				"minimumSize": new java.awt.Dimension( 100, 1000 )
 				add( new FormComponent( "javax.swing.JTextArea" ) {
-					name: "textArea1"
+					name: "inputTextArea"
 					"minimumSize": new java.awt.Dimension( 350, 25 )
 					"preferredSize": new java.awt.Dimension( 200, 25 )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button2"
 					"text": "發送"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sendTextButtonClick", true ) )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "South"
@@ -42,6 +43,9 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
 				"requestFocusEnabled": false
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "list1"
+				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )

@@ -21,6 +21,7 @@ import project.SingleClient;
 import project.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,18 +37,22 @@ public class ContactList extends JFrame {
 	
 	private User currentUser;
 	
+	// used id , chatroom object
+	private HashMap<String, ChatRoom> chatrooms = new HashMap<String, ChatRoom>();
+	
 	public ContactList(User user){
 		currentContentList = this;
 		currentUser = user;
 		
 		loadFriendList();
 		initComponents();
+		setTitle("Åwªï!! " + user.getAccount());
 	}
 	
 	public void loadFriendList(){
 		// clear the list
 		contactsList.clear();
-		
+		System.out.println("load contact list by contactlist: " + contactsList.size());
 		SingleClient.sent(new Info("friend", currentUser.getAccount()), new ResponseCallback(){
 
 			@Override
@@ -81,7 +86,7 @@ public class ContactList extends JFrame {
 					}
 					
 				});
-				//list1.repaint();
+				list1.repaint();
 			}
 
 			@Override
@@ -121,11 +126,35 @@ public class ContactList extends JFrame {
 
 	private void contactListValueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()){
-			JFrame chatRoom = new ChatRoom();
-			chatRoom.setVisible(true);
+			int index = e.getFirstIndex();
+			String chatWithAccount = contactsList.get(index).getAccount();
+			if (chatrooms.containsKey(chatWithAccount)){
+				ChatRoom hisChatRoom = chatrooms.get(chatWithAccount);
+				hisChatRoom.setVisible(true);
+				hisChatRoom.requestFocus();
+			} else {
+				ChatRoom chatRoom = new ChatRoom(currentUser, contactsList.get(index));
+				chatRoom.setVisible(true);
+				chatrooms.put(chatWithAccount, chatRoom);
+				SingleClient.sent(new Info("chatlog", currentUser.getAccount(), contactsList.get(index).getAccount()));
+			}
+			list1.clearSelection();
 		}
 	}
 
+	/* receive message for username */
+	public void receivedMessage(String username, List<String> messages){
+		if (chatrooms.containsKey(username)){
+			ChatRoom hisChatRoom = chatrooms.get(username);
+			hisChatRoom.setVisible(true);
+			hisChatRoom.requestFocus();
+			hisChatRoom.loadChatRecords(messages);
+		} else {
+			// new create
+			
+		}
+	}
+	
 	private void list1ValueChanged(ListSelectionEvent e) {
 		// TODO add your code here
 	}

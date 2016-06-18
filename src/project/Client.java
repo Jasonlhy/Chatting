@@ -22,6 +22,7 @@ friend list			=> new Info("friend", id);
 search id			=> new Info("searchid", id);
 set user file		=> new Info("setuser", new User(...));
 sent friend request => new Info("request", from_id, to_id);
+chat				=> new Info("chat", from, to, content);
 ------------------------------------------------------------------*/
 
 public class Client {
@@ -109,6 +110,14 @@ public class Client {
 							if (mainScreen != null){
 								mainScreen.loadFriendList();
 							}
+						}else if(s1.equals("chat")){
+							ArrayList<String> log = l.getChat();
+							
+							for(int i=0; i<log.size(); i++){
+								System.out.println(log.get(i));
+							}System.out.println("!!!");
+							String chatWithAccount = s2;
+							ContactList.getCurrentContentList().receivedMessage(chatWithAccount, log);
 						}
 					}
 				} catch(SocketException e){

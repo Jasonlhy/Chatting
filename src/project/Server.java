@@ -126,6 +126,7 @@ public class Server extends JFrame{
 						String s2 = l.getInfo2();
 						String s3 = l.getInfo3();
 						String s4 = l.getInfo4();
+						String s5 = l.getInfo5();
 						if(s.equals("login")){				//login
 							User u2 = l.getUser();
 							int index = User.getIndex(users, u2);
@@ -187,6 +188,15 @@ public class Server extends JFrame{
 							users.set(index, l.getUser());
 							show(l.getUser().getAccount()+" "+l.getUser().getPassword()+" "+l.getUser().getStat());
 							//sendMessage(new Info("renewuser", l.getUser()));
+						}else if(s.equals("chat")){
+							db.chat(s2, s3, s4, s5);
+							sendMessage(new Info("chat", s3, db.chatlog(s2, s3)));
+							if(onlineUser.contains(s3)){
+								userToAddr.get(s3).sendMessage(new Info("chat", s2, db.chatlog(s2, s3)));
+							}
+						}else if(s.equals("chatlog")){
+							//db.chat(s2, s3, s4, s5);
+							sendMessage(new Info("chat", s3, db.chatlog(s2, s3)));
 						}
 					}
 				} catch(SocketException e){

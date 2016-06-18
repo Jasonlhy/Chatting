@@ -5,18 +5,92 @@
 package ui;
 
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import java.awt.event.*;
 import javax.swing.*;
-import com.jgoodies.forms.factories.*;
-import com.jgoodies.forms.layout.*;
+import javax.swing.event.ListDataListener;
+
+
+import project.Info;
+import project.SingleClient;
+import project.User;
 
 /**
  * @author J J
  */
 public class ChatRoom extends JFrame {
-	public ChatRoom() {
+	
+	private User currentUser, toUser;
+	public List<String> log = new ArrayList<String>();
+	
+	public ChatRoom(User user, User user2) {
+		currentUser = user;
+		toUser = user2;
 		initComponents();
+		setTitle("¥¿©M" + user2.getAccount() + "²á¤Ñ...");
+		list1.setCellRenderer(new MyCellRenderer());
+	}
+	
+
+	 class MyCellRenderer extends JLabel implements ListCellRenderer<Object> {
+	     public Component getListCellRendererComponent(
+	       JList<?> list,           // the list
+	       Object value,            // value to display
+	       int index,               // cell index
+	       boolean isSelected,      // is the cell selected
+	       boolean cellHasFocus)    // does the cell have focus
+	     {
+	         String s = value.toString();
+	         setText(s);
+	    
+	       
+	         setBackground(Color.YELLOW);
+	         setForeground(Color.BLUE);
+	         setFont(list.getFont());
+	         setOpaque(true); // paint yellow pixel
+	         
+	        // System.out.println("called cell render");
+	         return this;
+	     }
+	 }
+	 
+	private void sendTextButtonClick(ActionEvent e) {
+		Date date = new Date();
+		String inputText = inputTextArea.getText();
+		SingleClient.sent(new Info("chat", currentUser.getAccount(), toUser.getAccount(), inputText, date.toString()));
 	}
 
+	public void loadChatRecords(List<String> messages){
+		log.clear();
+		log.addAll(messages);
+		list1.setModel(new ListModel<String>(){
+
+			@Override
+			public void addListDataListener(ListDataListener l) {
+				
+			}
+
+			@Override
+			public String getElementAt(int index) {
+				// return contactsList.get(index);
+				return log.get(index);
+			}
+
+			@Override
+			public int getSize() {
+				return log.size();
+			}
+
+			@Override
+			public void removeListDataListener(ListDataListener l) {
+				
+			}
+			
+		});
+	}
+	
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - J J
@@ -25,9 +99,10 @@ public class ChatRoom extends JFrame {
 		hSpacer1 = new JPanel(null);
 		button1 = new JButton();
 		panel2 = new JPanel();
-		textArea1 = new JTextArea();
+		inputTextArea = new JTextArea();
 		button2 = new JButton();
 		scrollPane1 = new JScrollPane();
+		list1 = new JList();
 
 		//======== this ========
 		setTitle("Chating!!");
@@ -63,13 +138,14 @@ public class ChatRoom extends JFrame {
 			panel2.setMinimumSize(new Dimension(100, 1000));
 			panel2.setLayout(new BoxLayout(panel2, BoxLayout.X_AXIS));
 
-			//---- textArea1 ----
-			textArea1.setMinimumSize(new Dimension(350, 25));
-			textArea1.setPreferredSize(new Dimension(200, 25));
-			panel2.add(textArea1);
+			//---- inputTextArea ----
+			inputTextArea.setMinimumSize(new Dimension(350, 25));
+			inputTextArea.setPreferredSize(new Dimension(200, 25));
+			panel2.add(inputTextArea);
 
 			//---- button2 ----
 			button2.setText("\u767c\u9001");
+			button2.addActionListener(e -> sendTextButtonClick(e));
 			panel2.add(button2);
 		}
 		contentPane.add(panel2, BorderLayout.SOUTH);
@@ -77,6 +153,7 @@ public class ChatRoom extends JFrame {
 		//======== scrollPane1 ========
 		{
 			scrollPane1.setRequestFocusEnabled(false);
+			scrollPane1.setViewportView(list1);
 		}
 		contentPane.add(scrollPane1, BorderLayout.CENTER);
 		setSize(495, 405);
@@ -91,8 +168,9 @@ public class ChatRoom extends JFrame {
 	private JPanel hSpacer1;
 	private JButton button1;
 	private JPanel panel2;
-	private JTextArea textArea1;
+	private JTextArea inputTextArea;
 	private JButton button2;
 	private JScrollPane scrollPane1;
+	private JList list1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

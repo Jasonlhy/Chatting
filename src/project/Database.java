@@ -16,6 +16,7 @@ public class Database {
 	private ArrayList<Shop> shops;*/
 	
 	private Connection con;
+	private Statement stat;
 	
 	public Database(String d) throws IOException, SQLException{
 		
@@ -25,6 +26,7 @@ public class Database {
 		SQLiteDataSource ds = new SQLiteDataSource(config); 
 		ds.setUrl("jdbc:sqlite:"+d+"db");
 		con = ds.getConnection();
+		stat = con.createStatement();
 		createTable();
 	}
 	public void createTable()throws SQLException{
@@ -34,8 +36,8 @@ public class Database {
         stat.executeUpdate(sql);
         sql = "create table if not exists friend (id string, fid string);";
         stat.executeUpdate(sql);
-        //sql = "create table if not exists request (id string, fid string);";
-        //stat.executeUpdate(sql);
+        sql = "create table if not exists chat (id string, id2 string, content string, time string);";
+        stat.executeUpdate(sql);
     }
 	public ArrayList<User> readUsers() throws SQLException{
 		return readU("select * from user;", 0);
@@ -78,5 +80,22 @@ public class Database {
 		stat.executeUpdate(sql);
 		sql = "insert into friend values('"+s2+"', '"+s1+"');";
 		stat.executeUpdate(sql);
+	}
+	public void chat(String from, String to, String con, String ti) throws SQLException{
+		//Statement stat = con.createStatement();
+		String sql = "insert into chat values('"+from+"', '"+to+"', '"+con+"', '"+ti+"');";
+		stat.executeUpdate(sql);
+	}
+	public ArrayList<String> chatlog(String id, String id2) throws SQLException{
+		String sql = "select * from chat where (id='"+id+"' and id2='"+id2+"') or (id='"+id2+"' and id2='"+id+"') order by rowid desc limit 20;";
+		ResultSet rs = stat.executeQuery(sql);
+        ArrayList<String> log = new ArrayList<>();
+        while(rs.next())
+        {
+        	//String s = rs.getString("time")+"\n"+rs.getString("id")+" : "+rs.getString("content")+"\n";
+        	log.add(rs.getString("time"));
+        	log.add(rs.getString("id")+" : "+rs.getString("content")+"\n");
+        	log.add("  ");
+        }return log;
 	}
 }
