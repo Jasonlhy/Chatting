@@ -21,4 +21,13 @@ public class SingleClient {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void sent(Object object){
+		Client client = getClient();
+		try {
+			client.sent(object);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

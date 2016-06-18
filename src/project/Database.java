@@ -38,15 +38,19 @@ public class Database {
         //stat.executeUpdate(sql);
     }
 	public ArrayList<User> readUsers() throws SQLException{
-		return readU("select * from user;");
+		return readU("select * from user;", 0);
 	}
-	public ArrayList<User> readU(String sql) throws SQLException{
+	public ArrayList<User> readU(String sql, int k) throws SQLException{
 		Statement stat = con.createStatement();
         ResultSet rs = stat.executeQuery(sql);
         ArrayList<User> us = new ArrayList<>();
         while(rs.next())
         {
-        	User user = new User(rs.getString("id"), rs.getString("pw"));
+        	User user;
+        	if(k==0)
+        		user = new User(rs.getString("id"), rs.getString("pw"));
+        	else
+        		user = new User(rs.getString("fid"), "");
         	us.add(user);
         }return us;
 	}
@@ -57,10 +61,10 @@ public class Database {
         stat.executeUpdate(sql);
     }
 	public ArrayList<User> getFriendList(String id) throws SQLException{
-		return readU("select * from friend where id=\""+id+"\";");
+		return readU("select * from friend where id=\""+id+"\";", 1);
 	}
 	public ArrayList<User> getSearchID(String id)  throws SQLException{
-		return readU("select * from user where id like '%"+id+"%';");
+		return readU("select * from user where id like '%"+id+"%';", 0);
 	}
 	public void setUserFile(User u) throws SQLException{
 		Statement stat = con.createStatement();

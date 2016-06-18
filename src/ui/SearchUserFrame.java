@@ -23,8 +23,10 @@ import project.User;
  */
 public class SearchUserFrame extends JFrame {
 	private List<User> searchResults = new ArrayList<User>();
+	private User currentUser;
 	
-	public SearchUserFrame() {
+	public SearchUserFrame(User user) {
+		currentUser = user;
 		initComponents();
 	}
 
@@ -80,6 +82,8 @@ public class SearchUserFrame extends JFrame {
 			int reply = JOptionPane.showConfirmDialog(null, "加好友", "你真的要加" + user.getAccount()  + "為好友嗎?", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION){
 				System.out.println("YESSS");
+				SingleClient.sent(new Info("request", currentUser.getAccount(), user.getAccount()));
+				ContactList.getCurrentContentList().loadFriendList();
 			}
 		}
 	}

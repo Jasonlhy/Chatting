@@ -57,6 +57,31 @@ public class LoginFrame extends JFrame {
 		}
 	}
 
+	private void registerButtonClicked(ActionEvent e) {
+		LoginFrame ownForm = this;
+		
+		String username = usernameTextField.getText();
+		String password = String.valueOf(passwordTextField.getPassword());
+		SingleClient.sent(new Info("create", new User(username, password)), new ResponseCallback(){
+
+			@Override
+			public void successResponse(Object o) {
+				User user = ((Info)o).getUser();
+				JFrame frame = new ContactList(user);
+				frame.setVisible(true);
+				ownForm.dispose();
+			}
+
+			@Override
+			public void failedResponse(Object o) {
+				System.out.println("l: " + o);
+				Info info = (Info) o;
+				messageLabel.setText(info.getInfo2());
+			}
+			
+		});
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - J J
@@ -153,6 +178,7 @@ public class LoginFrame extends JFrame {
 
 						//---- button2 ----
 						button2.setText("\u8a3b\u518a");
+						button2.addActionListener(e -> registerButtonClicked(e));
 						panel7.add(button2);
 					}
 					panel6.add(panel7);

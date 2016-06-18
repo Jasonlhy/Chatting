@@ -45,16 +45,15 @@ public class ContactList extends JFrame {
 	}
 	
 	public void loadFriendList(){
+		// clear the list
+		contactsList.clear();
+		
 		SingleClient.sent(new Info("friend", currentUser.getAccount()), new ResponseCallback(){
 
 			@Override
 			public void successResponse(Object o) {
 				List<User> friends = (List<User>)o;
-				
 				contactsList.addAll(friends);
-				// fake
-				// for (int i = 0; i < 30; i++)
-					contactsList.add(new User("Jason", "god", "stat"));
 				
 				System.out.println("add fake contat list");
 				list1.setModel(new ListModel<String>(){
@@ -108,7 +107,7 @@ public class ContactList extends JFrame {
 	private void searchUserActionPerformed(ActionEvent e) {
 		// TODO add your code here
 		System.out.println("search user\n");
-		JFrame frame = new SearchUserFrame();
+		JFrame frame = new SearchUserFrame(currentUser);
 		frame.setVisible(true);
 	}
 

@@ -174,12 +174,12 @@ public class Server extends JFrame{
 							sendMessage(new Info("searchid", db.getSearchID(s2)));
 						}else if(s.equals("request")){
 							db.sentRequest(s2, s3);
-							sendMessage(new Info("friend", db.getFriendList(s2)));
+							//sendMessage(new Info("friend", db.getFriendList(s2)));
 							if(onlineUser.contains(s3)){
-								userToAddr.get(s3).sendMessage(new Info("friend", db.getFriendList(s3)));
+								userToAddr.get(s3).sendMessage(new Info("friendnew", db.getFriendList(s3)));
 							}
 						}else if(s.equals("searchname")){
-							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';");
+							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';", 0);
 							sendMessage(new Info("searchname", us));
 						}else if(s.equals("setuser")){
 							db.setUserFile(l.getUser());

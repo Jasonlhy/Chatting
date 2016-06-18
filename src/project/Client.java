@@ -9,6 +9,10 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
+import ui.ContactList;
+
 
 /*------------------------------------------------------------------
 login 				=> new Info("login", new User(...));
@@ -97,8 +101,12 @@ public class Client {
 							//l.getUsers()
 							List<User> friends = l.getUsers();
 							currentCallback.successResponse(friends);
-						}else if(s1.equals("renewuser")){			//renew user file
+						}else if(s1.equals("friendnew")){			//renew user file
 							//l.getUser()
+							ContactList mainScreen = ContactList.getCurrentContentList();
+							if (mainScreen != null){
+								mainScreen.loadFriendList();
+							}
 						}
 					}
 				} catch(SocketException e){
