@@ -9,14 +9,15 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 
-/*-----------------------------------------------------
-login 			=> new Info("login", new User(...));
-create account	=> new Info("create", new User(...));
-logout			=> new Info("out", "");
-friend list		=> new Info("friend", id);
-search id		=> new Info("searchid", id);
-set user file	=> new Info("setuser", new User(...));
--------------------------------------------------------*/
+/*------------------------------------------------------------------
+login 				=> new Info("login", new User(...));
+create account		=> new Info("create", new User(...));
+logout				=> new Info("out", "");
+friend list			=> new Info("friend", id);
+search id			=> new Info("searchid", id);
+set user file		=> new Info("setuser", new User(...));
+sent friend request => new Info("request", from_id, to_id);
+------------------------------------------------------------------*/
 
 public class Client {
 	

@@ -124,6 +124,8 @@ public class Server extends JFrame{
 						Info l = (Info) o;
 						String s = l.getInfo();
 						String s2 = l.getInfo2();
+						String s3 = l.getInfo3();
+						String s4 = l.getInfo4();
 						if(s.equals("login")){				//login
 							User u2 = l.getUser();
 							int index = User.getIndex(users, u2);
@@ -170,6 +172,12 @@ public class Server extends JFrame{
 							sendMessage(new Info("friend", db.getFriendList(s2)));
 						}else if(s.equals("searchid")){
 							sendMessage(new Info("searchid", db.getSearchID(s2)));
+						}else if(s.equals("request")){
+							db.sentRequest(s2, s3);
+							sendMessage(new Info("friend", db.getFriendList(s2)));
+							if(onlineUser.contains(s3)){
+								userToAddr.get(s3).sendMessage(new Info("friend", db.getFriendList(s3)));
+							}
 						}else if(s.equals("searchname")){
 							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';");
 							sendMessage(new Info("searchname", us));

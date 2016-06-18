@@ -34,8 +34,8 @@ public class Database {
         stat.executeUpdate(sql);
         sql = "create table if not exists friend (id string, fid string);";
         stat.executeUpdate(sql);
-        sql = "create table if not exists request (id string, fid string);";
-        stat.executeUpdate(sql);
+        //sql = "create table if not exists request (id string, fid string);";
+        //stat.executeUpdate(sql);
     }
 	public ArrayList<User> readUsers() throws SQLException{
 		return readU("select * from user;");
@@ -65,6 +65,13 @@ public class Database {
 	public void setUserFile(User u) throws SQLException{
 		Statement stat = con.createStatement();
 		String sql = "update user set pw='"+u.getPassword()+"', stat='"+u.getStat()+"' where id='"+u.getAccount()+"';";
+		stat.executeUpdate(sql);
+	}
+	public void sentRequest(String s1, String s2) throws SQLException{
+		Statement stat = con.createStatement();
+		String sql = "insert into friend values('"+s1+"', '"+s2+"');";
+		stat.executeUpdate(sql);
+		sql = "insert into friend values('"+s2+"', '"+s1+"');";
 		stat.executeUpdate(sql);
 	}
 }

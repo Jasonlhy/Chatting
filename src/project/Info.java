@@ -12,14 +12,27 @@ import java.util.ArrayList;
 public class Info implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String information;
-	private String information2;
+	private String information = "";
+	private String information2 = "";
+	private String information3 = "";
+	private String information4 = "";
 	private User u;
 	public ArrayList<User> us;
 	
 	public Info(String info, String info2){
 		information = info;
 		information2 = info2;
+	}
+	public Info(String info, String info2, String info3){
+		information = info;
+		information2 = info2;
+		information3 = info3;
+	}
+	public Info(String info, String info2, String info3, String info4){
+		information = info;
+		information2 = info2;
+		information3 = info3;
+		information4 = info4;
 	}
 	public Info(String info, User u2){
 		information = info;
@@ -34,6 +47,12 @@ public class Info implements Serializable{
 	}
 	public String getInfo2(){
 		return information2;
+	}
+	public String getInfo3(){
+		return information3;
+	}
+	public String getInfo4(){
+		return information4;
 	}
 	public User getUser(){
 		return u;
