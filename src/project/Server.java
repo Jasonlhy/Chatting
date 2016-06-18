@@ -162,16 +162,17 @@ public class Server extends JFrame{
 							onlineUser.remove(name);
 							userToAddr.remove(name);
 							name = null;
-						}else if(s.equals("Friend")){
-							//ArrayList<User> f = db.readU("select * from friend where id = \""+name+"\";");
-							//ArrayList<User> r = db.readU("select * from request where fid = \""+name+"\";");
-							//sendMessage(new friendList(f, r));
+						}else if(s.equals("friend")){
+							sendMessage(new Info("friend", db.getFriendList(s2)));
 						}else if(s.equals("searchid")){
 							ArrayList<User> us = db.readU("select * from user where id = \""+s2+"\";");
 							sendMessage(new Info("searchid", us));
 						}else if(s.equals("searchname")){
 							ArrayList<User> us = db.readU("select * from user where name = \""+s2+"\";");
 							sendMessage(new Info("searchname", us));
+						}else if(s.equals("setuser")){
+							db.setUserFile(l.getUser());
+							sendMessage(new Info("renewuser", l.getUser()));
 						}
 					}
 				} catch(SocketException e){

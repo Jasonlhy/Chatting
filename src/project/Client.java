@@ -8,6 +8,16 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+
+/*-----------------------------------------------------
+login 			=> new Info("login", new User(...));
+create account	=> new Info("create", new User(...));
+logout			=> new Info("out", "");
+friend list		=> new Info("friend", id);
+search id		=> new Info("searchid", id);
+set user file	=> new Info("setuser", new User(...));
+-------------------------------------------------------*/
+
 public class Client {
 	
 	private String desIPAddr;
@@ -62,14 +72,19 @@ public class Client {
 						String s1 = l.getInfo();
 						String s2 = l.getInfo2();
 						
-						if(s1.equals("loginer"))
-							mainApp.setOpeInfo(s2);
-						else if(s1.equals("login"))
-							mainApp.setOpeInfo(l.getUser());
-						else if(s1.equals("searchid")){
-							mainApp.friend.setSearch(l.getUsers());
-						}else if(s1.equals("searchname")){
+						if(s1.equals("loginer")){					//login error message
+							//s2 (error message)
+
+						}else if(s1.equals("login")){				//login successfully, with the user
+							//l.getUser()
 							
+						}else if(s1.equals("searchid")){			//search user by id
+							//l.getUsers()
+							
+						}else if(s1.equals("friend")){				//receive friend list
+							//l.getUsers()
+						}else if(s1.equals("renewuser")){			//renew user file
+							//l.getUser()
 						}
 					}
 				} catch(SocketException e){

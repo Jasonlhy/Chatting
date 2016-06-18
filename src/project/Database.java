@@ -30,7 +30,7 @@ public class Database {
 	public void createTable()throws SQLException{
 		Statement stat = con.createStatement();
 		
-        String sql = "create table if not exists user (id string, pw string);";
+        String sql = "create table if not exists user (id string, pw string, stat string);";
         stat.executeUpdate(sql);
         sql = "create table if not exists friend (id string, fid string);";
         stat.executeUpdate(sql);
@@ -53,8 +53,15 @@ public class Database {
 	public void addUser(User u)throws SQLException{
 		Statement stat = con.createStatement();
 		
-        String sql = "insert into user values(\""+u.getAccount()+"\", \""+u.getPassword()+"\");";
+        String sql = "insert into user values(\""+u.getAccount()+"\", \""+u.getPassword()+"\", '');";
         stat.executeUpdate(sql);
     }
-	
+	public ArrayList<User> getFriendList(String id) throws SQLException{
+		return readU("select * from friend where id=\""+id+"\";");
+	}
+	public void setUserFile(User u) throws SQLException{
+		Statement stat = con.createStatement();
+		String sql = "update user set pw='"+u.getPassword()+"', stat='"+u.getStat()+"' where id='"+u.getAccount()+"';";
+		stat.executeUpdate(sql);
+	}
 }
