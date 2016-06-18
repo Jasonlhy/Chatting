@@ -6,11 +6,19 @@ package ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import org.jdesktop.beansbinding.*;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.*;
+
+import project.Client;
+import project.Info;
+import project.ResponseCallback;
+import project.SingleClient;
+import project.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +27,80 @@ import java.util.List;
  * @author J J
  */
 public class ContactList extends JFrame {
-	public ContactList() {
-		contactsList.add("Item 1");
-		contactsList.add("Item 2");
+	
+	public ContactList(User user){
+		Client client = SingleClient.getClient();
+		try {
+			client.sent(new Info("friend", user.getAccount()), new ResponseCallback(){
+
+				@Override
+				public void successResponse(Object o) {
+					List<User> friends = (List<User>)o;
+					
+					contactsList.addAll(friends);
+					// fake
+					for (int i = 0; i < 30; i++)
+						contactsList.add(new User("Jason", "god", "stat"));
+					
+					System.out.println("add fake contat list");
+					list1.setModel(new ListModel<String>(){
+
+						@Override
+						public void addListDataListener(ListDataListener l) {
+							
+						}
+
+						@Override
+						public String getElementAt(int index) {
+							// return contactsList.get(index);
+							User user = contactsList.get(index);
+							return  user.getAccount() + " - " + user.getStat();
+						}
+
+						@Override
+						public int getSize() {
+							return contactsList.size();
+						}
+
+						@Override
+						public void removeListDataListener(ListDataListener l) {
+							
+						}
+						
+					});
+					//list1.repaint();
+				}
+
+				@Override
+				public void failedResponse(Object o) {
+					// ignore
+				}
+				
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		initComponents();
 	}
 	
-	private List<String> contactsList = new ArrayList<String>();
+	/*
+	public ContactList() {
+	//	contactsList.add("Item 1");
+//		contactsList.add("Item 2");
+		
+		initComponents();
+	}
+	*/
+	
+	private List<User> contactsList = new ArrayList<User>();
 	
 
-	public List<String> getContactsList() {
+	public List<User> getContactsList() {
 		return contactsList;
 	}
 
-	public void setContactsList(List<String> contactsList) {
+	public void setContactsList(List<User> contactsList) {
 		this.contactsList = contactsList;
 	}
 
@@ -111,12 +178,6 @@ public class ContactList extends JFrame {
 		contentPane.add(scrollPane1, BorderLayout.CENTER);
 		setSize(500, 515);
 		setLocationRelativeTo(getOwner());
-
-		//---- bindings ----
-		bindingGroup = new BindingGroup();
-		bindingGroup.addBinding(SwingBindings.createJListBinding(UpdateStrategy.READ_WRITE,
-			this, (BeanProperty) BeanProperty.create("contactsList"), list1));
-		bindingGroup.bind();
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -127,8 +188,7 @@ public class ContactList extends JFrame {
 	private JMenuItem menuItem3;
 	private JMenuItem menuItem1;
 	private JScrollPane scrollPane1;
-	private JList list1;
-	private BindingGroup bindingGroup;
+	private JList<String> list1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 }

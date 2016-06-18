@@ -41,9 +41,5 @@ new FormModel {
 			"location": new java.awt.Point( 65, 10 )
 			"size": new java.awt.Dimension( 500, 515 )
 		} )
-		addBindingGroup( new FormBindingGroup( class org.jdesktop.beansbinding.BindingGroup ) {
-			"name": "bindingGroup"
-			addBinding( new FormBinding( "this", "contactsList", "list1", "elements" ) )
-		} )
 	}
 }

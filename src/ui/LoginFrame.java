@@ -38,7 +38,8 @@ public class LoginFrame extends JFrame {
 
 				@Override
 				public void successResponse(Object o) {
-					JFrame frame = new ContactList();
+					User user = ((Info)o).getUser();
+					JFrame frame = new ContactList(user);
 					frame.setVisible(true);
 					ownForm.dispose();
 				}

@@ -17,6 +17,8 @@ public class User implements Serializable{
 		password = pw;
 		//freind = new ArrayList<>();
 	}
+	
+
 	public User(String id, String pw, String st){
 		account = id;
 		password = pw;
