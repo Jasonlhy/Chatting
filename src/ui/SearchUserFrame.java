@@ -7,8 +7,15 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.event.ListDataListener;
+
 import java.util.List;
 import java.util.ArrayList;
+
+import project.Info;
+import project.ResponseCallback;
+import project.SingleClient;
 import project.User;
 
 /**
@@ -23,7 +30,61 @@ public class SearchUserFrame extends JFrame {
 
 	private void searchButtonActionPerformed(ActionEvent e) {
 		String searchUserId = searchTextField.getText();
+		SingleClient.sent(new Info("searchid", searchUserId), new ResponseCallback(){
+
+			@Override
+			public void successResponse(Object o) {
+				List<User> users = (List<User>)o;
+				searchResults = users;
+				
+				resultList.setModel(new ListModel<String>(){
+
+					@Override
+					public void addListDataListener(ListDataListener arg0) {
+						
+					}
+
+					@Override
+					public String getElementAt(int index) {
+						User user = searchResults.get(index);
+
+						return  user.getAccount() + " - " + user.getStat();
+					}
+
+					@Override
+					public int getSize() {
+						return searchResults.size();
+					}
+
+					@Override
+					public void removeListDataListener(ListDataListener l) {
+						
+					}
+					
+				});
+			}
+
+			@Override
+			public void failedResponse(Object o) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 	}
+
+	private void resultListValueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()){
+			int index = e.getLastIndex();
+			User user = searchResults.get(index);
+			int reply = JOptionPane.showConfirmDialog(null, "加好友", "你真的要加" + user.getAccount()  + "為好友嗎?", JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION){
+				System.out.println("YESSS");
+			}
+		}
+	}
+
+	
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -36,7 +97,7 @@ public class SearchUserFrame extends JFrame {
 		searchTextField = new JTextField();
 		button1 = new JButton();
 		scrollPane1 = new JScrollPane();
-		resultList = new JList();
+		resultList = new JList<String>();
 
 		//======== this ========
 		setTitle("Chating!!");
@@ -94,6 +155,9 @@ public class SearchUserFrame extends JFrame {
 
 			//======== scrollPane1 ========
 			{
+
+				//---- resultList ----
+				resultList.addListSelectionListener(e -> resultListValueChanged(e));
 				scrollPane1.setViewportView(resultList);
 			}
 			panel2.add(scrollPane1);
@@ -103,7 +167,7 @@ public class SearchUserFrame extends JFrame {
 		setLocationRelativeTo(getOwner());
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
-
+	 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - J J
 	private JPanel panel1;
@@ -114,6 +178,6 @@ public class SearchUserFrame extends JFrame {
 	private JTextField searchTextField;
 	private JButton button1;
 	private JScrollPane scrollPane1;
-	private JList resultList;
+	private JList<String> resultList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

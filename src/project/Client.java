@@ -91,7 +91,7 @@ public class Client {
 							currentCallback.successResponse(l);
 						}else if(s1.equals("searchid")){			//search user by id
 							//l.getUsers()
-							
+							currentCallback.successResponse(l.getUsers());
 						}else if(s1.equals("friend")){				//receive friend list
 							//l.getUsers()
 							List<User> friends = l.getUsers();

@@ -28,70 +28,71 @@ import java.util.List;
  */
 public class ContactList extends JFrame {
 	
+	// get activated contnet list window
+	private static ContactList currentContentList;
+	public static ContactList getCurrentContentList(){
+		return currentContentList;
+	}
+	
+	private User currentUser;
+	
 	public ContactList(User user){
-		Client client = SingleClient.getClient();
-		try {
-			client.sent(new Info("friend", user.getAccount()), new ResponseCallback(){
-
-				@Override
-				public void successResponse(Object o) {
-					List<User> friends = (List<User>)o;
-					
-					contactsList.addAll(friends);
-					// fake
-					for (int i = 0; i < 30; i++)
-						contactsList.add(new User("Jason", "god", "stat"));
-					
-					System.out.println("add fake contat list");
-					list1.setModel(new ListModel<String>(){
-
-						@Override
-						public void addListDataListener(ListDataListener l) {
-							
-						}
-
-						@Override
-						public String getElementAt(int index) {
-							// return contactsList.get(index);
-							User user = contactsList.get(index);
-							return  user.getAccount() + " - " + user.getStat();
-						}
-
-						@Override
-						public int getSize() {
-							return contactsList.size();
-						}
-
-						@Override
-						public void removeListDataListener(ListDataListener l) {
-							
-						}
-						
-					});
-					//list1.repaint();
-				}
-
-				@Override
-				public void failedResponse(Object o) {
-					// ignore
-				}
-				
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		currentContentList = this;
+		currentUser = user;
 		
+		loadFriendList();
 		initComponents();
 	}
 	
-	/*
-	public ContactList() {
-	//	contactsList.add("Item 1");
-//		contactsList.add("Item 2");
-		
-		initComponents();
+	public void loadFriendList(){
+		SingleClient.sent(new Info("friend", currentUser.getAccount()), new ResponseCallback(){
+
+			@Override
+			public void successResponse(Object o) {
+				List<User> friends = (List<User>)o;
+				
+				contactsList.addAll(friends);
+				// fake
+				// for (int i = 0; i < 30; i++)
+					contactsList.add(new User("Jason", "god", "stat"));
+				
+				System.out.println("add fake contat list");
+				list1.setModel(new ListModel<String>(){
+
+					@Override
+					public void addListDataListener(ListDataListener l) {
+						
+					}
+
+					@Override
+					public String getElementAt(int index) {
+						// return contactsList.get(index);
+						User user = contactsList.get(index);
+						return  user.getAccount() + " - " + user.getStat();
+					}
+
+					@Override
+					public int getSize() {
+						return contactsList.size();
+					}
+
+					@Override
+					public void removeListDataListener(ListDataListener l) {
+						
+					}
+					
+				});
+				//list1.repaint();
+			}
+
+			@Override
+			public void failedResponse(Object o) {
+				// ignore
+			}
+			
+		});
+	
 	}
-	*/
 	
 	private List<User> contactsList = new ArrayList<User>();
 	
@@ -107,6 +108,8 @@ public class ContactList extends JFrame {
 	private void searchUserActionPerformed(ActionEvent e) {
 		// TODO add your code here
 		System.out.println("search user\n");
+		JFrame frame = new SearchUserFrame();
+		frame.setVisible(true);
 	}
 
 	private void setProfileActionPerformed(ActionEvent e) {
