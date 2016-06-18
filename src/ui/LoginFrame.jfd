@@ -34,7 +34,7 @@ new FormModel {
 							"horizontalAlignment": 4
 						} )
 						add( new FormComponent( "javax.swing.JTextField" ) {
-							name: "textField1"
+							name: "usernameTextField"
 							"preferredSize": new java.awt.Dimension( 100, 21 )
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
@@ -43,8 +43,9 @@ new FormModel {
 								name: "label3"
 								"text": "密碼："
 							} )
-							add( new FormComponent( "javax.swing.JTextField" ) {
-								name: "textField2"
+							add( new FormComponent( "javax.swing.JPasswordField" ) {
+								name: "passwordTextField"
+								"minimumSize": new java.awt.Dimension( 100, 21 )
 								"preferredSize": new java.awt.Dimension( 100, 21 )
 							} )
 						} )
@@ -71,7 +72,7 @@ new FormModel {
 						} ) {
 							name: "panel8"
 							add( new FormComponent( "javax.swing.JLabel" ) {
-								name: "label5"
+								name: "messageLabel"
 								"text": "text"
 								"opaque": true
 								"preferredSize": new java.awt.Dimension( 200, 15 )

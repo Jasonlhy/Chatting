@@ -24,8 +24,8 @@ public class Client {
 	private int desPortNum;
 	private Socket socket;
 	private ObjectOutputStream writer;
-	private MainApp mainApp;
 	private User user;
+	private ResponseCallback currentCallback;
 	
 	public Client(String IPAddress, int portNum) {
 		this.desIPAddr = IPAddress;
@@ -33,9 +33,7 @@ public class Client {
 		connect();
 	}
 	
-	public void setMainApp(MainApp main){
-		mainApp = main;
-	}
+
 	
 	private void connect() {
 		try {
@@ -50,10 +48,19 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
 	public void sent(Object o) throws IOException{
     	writer.writeObject(o);
     	writer.reset();
     }
+	
+	public void sent(Object o, ResponseCallback cb) throws IOException{
+    	writer.writeObject(o);
+    	writer.reset();
+    	currentCallback = cb;
+    }
+	
+	
     class ClientThread extends Thread{
 		
         private ObjectInputStream reader;
@@ -74,10 +81,13 @@ public class Client {
 						
 						if(s1.equals("loginer")){					//login error message
 							//s2 (error message)
-
+							System.out.println(s2);
+							System.out.println("l: " + l);
+							currentCallback.failedResponse(l);
 						}else if(s1.equals("login")){				//login successfully, with the user
 							//l.getUser()
-							
+							System.out.println(l.getUser().getAccount());
+							currentCallback.successResponse(l);
 						}else if(s1.equals("searchid")){			//search user by id
 							//l.getUsers()
 							

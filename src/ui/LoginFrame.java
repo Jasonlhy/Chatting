@@ -6,7 +6,15 @@ package ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
+
+import project.Client;
+import project.Info;
+import project.ResponseCallback;
+import project.SingleClient;
+import project.User;
 
 /**
  * @author J J
@@ -18,6 +26,34 @@ public class LoginFrame extends JFrame {
 
 	private void loginButtonActionPerformed(ActionEvent e) {
 		System.out.println("Login");
+		Client client = SingleClient.getClient();
+		// client.sent( new Info("login", new User()));
+		String username = usernameTextField.getText();
+		String password = String.valueOf(passwordTextField.getPassword());
+		
+		try {
+			LoginFrame ownForm = this;
+			// client.sent( new Info("login", new User(username, password)));
+			client.sent(new Info("login", new User(username, password)), new ResponseCallback(){
+
+				@Override
+				public void successResponse(Object o) {
+					JFrame frame = new ContactList();
+					frame.setVisible(true);
+					ownForm.dispose();
+				}
+
+				@Override
+				public void failedResponse(Object o) {
+					System.out.println("l: " + o);
+					Info info = (Info) o;
+					messageLabel.setText(info.getInfo2());
+				}
+				
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	private void initComponents() {
@@ -28,16 +64,16 @@ public class LoginFrame extends JFrame {
 		panel3 = new JPanel();
 		panel4 = new JPanel();
 		label4 = new JLabel();
-		textField1 = new JTextField();
+		usernameTextField = new JTextField();
 		panel5 = new JPanel();
 		label3 = new JLabel();
-		textField2 = new JTextField();
+		passwordTextField = new JPasswordField();
 		panel6 = new JPanel();
 		panel7 = new JPanel();
 		button1 = new JButton();
 		button2 = new JButton();
 		panel8 = new JPanel();
-		label5 = new JLabel();
+		messageLabel = new JLabel();
 
 		//======== this ========
 		setTitle("Chatting!!");
@@ -80,9 +116,9 @@ public class LoginFrame extends JFrame {
 					label4.setHorizontalAlignment(SwingConstants.RIGHT);
 					panel4.add(label4);
 
-					//---- textField1 ----
-					textField1.setPreferredSize(new Dimension(100, 21));
-					panel4.add(textField1);
+					//---- usernameTextField ----
+					usernameTextField.setPreferredSize(new Dimension(100, 21));
+					panel4.add(usernameTextField);
 
 					//======== panel5 ========
 					{
@@ -92,9 +128,10 @@ public class LoginFrame extends JFrame {
 						label3.setText("\u5bc6\u78bc\uff1a");
 						panel5.add(label3);
 
-						//---- textField2 ----
-						textField2.setPreferredSize(new Dimension(100, 21));
-						panel5.add(textField2);
+						//---- passwordTextField ----
+						passwordTextField.setMinimumSize(new Dimension(100, 21));
+						passwordTextField.setPreferredSize(new Dimension(100, 21));
+						panel5.add(passwordTextField);
 					}
 					panel4.add(panel5);
 				}
@@ -123,14 +160,14 @@ public class LoginFrame extends JFrame {
 					{
 						panel8.setLayout(new FlowLayout(FlowLayout.LEFT, 100, 5));
 
-						//---- label5 ----
-						label5.setText("text");
-						label5.setOpaque(true);
-						label5.setPreferredSize(new Dimension(200, 15));
-						label5.setFont(new Font("\u65b0\u7d30\u660e\u9ad4", Font.PLAIN, 18));
-						label5.setHorizontalAlignment(SwingConstants.CENTER);
-						label5.setForeground(Color.red);
-						panel8.add(label5);
+						//---- messageLabel ----
+						messageLabel.setText("text");
+						messageLabel.setOpaque(true);
+						messageLabel.setPreferredSize(new Dimension(200, 15));
+						messageLabel.setFont(new Font("\u65b0\u7d30\u660e\u9ad4", Font.PLAIN, 18));
+						messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						messageLabel.setForeground(Color.red);
+						panel8.add(messageLabel);
 					}
 					panel6.add(panel8);
 				}
@@ -151,15 +188,15 @@ public class LoginFrame extends JFrame {
 	private JPanel panel3;
 	private JPanel panel4;
 	private JLabel label4;
-	private JTextField textField1;
+	private JTextField usernameTextField;
 	private JPanel panel5;
 	private JLabel label3;
-	private JTextField textField2;
+	private JPasswordField passwordTextField;
 	private JPanel panel6;
 	private JPanel panel7;
 	private JButton button1;
 	private JButton button2;
 	private JPanel panel8;
-	private JLabel label5;
+	private JLabel messageLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

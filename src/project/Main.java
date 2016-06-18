@@ -52,7 +52,7 @@ public class Main extends JFrame implements MouseListener{
 			}
 		}
 		client = new Client("127.0.0.1", 8000);
-		client.setMainApp(mainApp);
+	
 		mainApp.setClient(client);
 	}
 	

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author J J
  */
-public class ContactList extends JPanel {
+public class ContactList extends JFrame {
 	public ContactList() {
 		contactsList.add("Item 1");
 		contactsList.add("Item 2");
@@ -51,8 +51,14 @@ public class ContactList extends JPanel {
 	}
 
 	private void contactListValueChanged(ListSelectionEvent e) {
-		JFrame chatRoom = new ChatRoom();
-		chatRoom.setVisible(true);
+		if (!e.getValueIsAdjusting()){
+			JFrame chatRoom = new ChatRoom();
+			chatRoom.setVisible(true);
+		}
+	}
+
+	private void list1ValueChanged(ListSelectionEvent e) {
+		// TODO add your code here
 	}
 
 	private void initComponents() {
@@ -66,15 +72,8 @@ public class ContactList extends JPanel {
 		list1 = new JList();
 
 		//======== this ========
-
-		// JFormDesigner evaluation mark
-		setBorder(new javax.swing.border.CompoundBorder(
-			new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-				"JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
-				javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-				java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
-		setLayout(new BorderLayout());
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new BorderLayout());
 
 		//======== menuBar1 ========
 		{
@@ -97,7 +96,7 @@ public class ContactList extends JPanel {
 			menuItem1.addActionListener(e -> userSpaceActionPerformed(e));
 			menuBar1.add(menuItem1);
 		}
-		add(menuBar1, BorderLayout.NORTH);
+		contentPane.add(menuBar1, BorderLayout.NORTH);
 
 		//======== scrollPane1 ========
 		{
@@ -105,10 +104,13 @@ public class ContactList extends JPanel {
 			//---- list1 ----
 			list1.addListSelectionListener(e -> {
 			contactListValueChanged(e);
+			list1ValueChanged(e);
 		});
 			scrollPane1.setViewportView(list1);
 		}
-		add(scrollPane1, BorderLayout.CENTER);
+		contentPane.add(scrollPane1, BorderLayout.CENTER);
+		setSize(500, 515);
+		setLocationRelativeTo(getOwner());
 
 		//---- bindings ----
 		bindingGroup = new BindingGroup();
