@@ -7,6 +7,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /*------------------------------------------------------------------
@@ -91,9 +92,11 @@ public class Client {
 							currentCallback.successResponse(l);
 						}else if(s1.equals("searchid")){			//search user by id
 							//l.getUsers()
-							
+							currentCallback.successResponse(l.getUsers());
 						}else if(s1.equals("friend")){				//receive friend list
 							//l.getUsers()
+							List<User> friends = l.getUsers();
+							currentCallback.successResponse(friends);
 						}else if(s1.equals("renewuser")){			//renew user file
 							//l.getUser()
 						}
