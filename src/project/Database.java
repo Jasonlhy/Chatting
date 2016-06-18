@@ -59,6 +59,9 @@ public class Database {
 	public ArrayList<User> getFriendList(String id) throws SQLException{
 		return readU("select * from friend where id=\""+id+"\";");
 	}
+	public ArrayList<User> getSearchID(String id)  throws SQLException{
+		return readU("select * from user where id like '%"+id+"%';");
+	}
 	public void setUserFile(User u) throws SQLException{
 		Statement stat = con.createStatement();
 		String sql = "update user set pw='"+u.getPassword()+"', stat='"+u.getStat()+"' where id='"+u.getAccount()+"';";

@@ -7,11 +7,16 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.List;
+import java.util.ArrayList;
+import project.User;
 
 /**
  * @author J J
  */
 public class SearchUserFrame extends JFrame {
+	private List<User> searchResults = new ArrayList<User>();
+	
 	public SearchUserFrame() {
 		initComponents();
 	}

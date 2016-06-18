@@ -5,7 +5,7 @@ public class SingleClient {
 	
 	public static Client getClient(){
 		if (client == null){
-			client = new Client("127.0.0.1", 8000);
+			client = new Client("140.114.86.105", 8000);
 		}
 		
 		return client;
