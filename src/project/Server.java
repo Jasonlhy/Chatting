@@ -129,13 +129,17 @@ public class Server extends JFrame{
 							int index = User.getIndex(users, u2);
 							
 							if(index!=-1&&users.get(index).getPassword().equals(u2.getPassword())){        //successful
+								addUser(u2.getAccount());
+								show(name+" log in at "+ socket.getInetAddress()+" : "+ socket.getPort());
+								sendMessage(new Info("login", u2));
+								/*
 								if(onlineUser.contains(u2.getAccount())){
 									sendMessage(new Info("loginer", "The account has been logged in."));
 								}else{
 									addUser(u2.getAccount());
 									show(name+" log in at "+ socket.getInetAddress()+" : "+ socket.getPort());
 									sendMessage(new Info("login", u2));
-								}	
+								}*/
 							}else if(index!=-1&&!users.get(index).getPassword().equals(u2.getPassword())){
 								sendMessage(new Info("loginer", "WRONG password"));
 							}else if(index==-1){
@@ -165,10 +169,9 @@ public class Server extends JFrame{
 						}else if(s.equals("friend")){
 							sendMessage(new Info("friend", db.getFriendList(s2)));
 						}else if(s.equals("searchid")){
-							ArrayList<User> us = db.readU("select * from user where id = \""+s2+"\";");
-							sendMessage(new Info("searchid", us));
+							sendMessage(new Info("searchid", db.getSearchID(s2)));
 						}else if(s.equals("searchname")){
-							ArrayList<User> us = db.readU("select * from user where name = \""+s2+"\";");
+							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';");
 							sendMessage(new Info("searchname", us));
 						}else if(s.equals("setuser")){
 							db.setUserFile(l.getUser());
