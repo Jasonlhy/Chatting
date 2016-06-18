@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
 
 
@@ -24,12 +25,17 @@ public class ChatRoom extends JFrame {
 	
 	private User currentUser, toUser;
 	public List<String> log = new ArrayList<String>();
+	private Color currentColor;
+	private Color currentBackground;
 	
 	public ChatRoom(User user, User user2) {
 		currentUser = user;
 		toUser = user2;
 		initComponents();
 		setTitle("¥¿©M" + user2.getAccount() + "²á¤Ñ...");
+		
+		currentColor = list1.getForeground();
+		currentBackground = list1.getBackground();
 		list1.setCellRenderer(new MyCellRenderer());
 	}
 	
@@ -46,8 +52,8 @@ public class ChatRoom extends JFrame {
 	         setText(s);
 	    
 	       
-	         setBackground(Color.YELLOW);
-	         setForeground(Color.BLUE);
+	         setBackground(currentBackground);
+	         setForeground(currentColor);
 	         setFont(list.getFont());
 	         setOpaque(true); // paint yellow pixel
 	         
@@ -60,6 +66,7 @@ public class ChatRoom extends JFrame {
 		Date date = new Date();
 		String inputText = inputTextArea.getText();
 		SingleClient.sent(new Info("chat", currentUser.getAccount(), toUser.getAccount(), inputText, date.toString()));
+		inputTextArea.setText("");
 	}
 
 	public void loadChatRecords(List<String> messages){
@@ -90,6 +97,21 @@ public class ChatRoom extends JFrame {
 			
 		});
 	}
+
+	private void fontcolorlabelMouseClicked(MouseEvent e) {
+		Color chosenColor = JColorChooser.showDialog(null, "Choose a color", fontcolorlabel.getForeground());
+		System.out.println("HIHIHI");
+		currentColor = chosenColor;
+		fontcolorlabel.setForeground(currentColor);
+		list1.repaint();
+	}
+
+	private void backgroundColorLabelMouseClicked(MouseEvent e) {
+		Color chosenColor = JColorChooser.showDialog(null, "Choose a color", backgroundColorLabel.getBackground());
+		currentBackground = chosenColor;
+		backgroundColorLabel.setBackground(chosenColor);
+		list1.repaint();
+	}
 	
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -100,6 +122,9 @@ public class ChatRoom extends JFrame {
 		button1 = new JButton();
 		panel2 = new JPanel();
 		inputTextArea = new JTextArea();
+		panel3 = new JPanel();
+		fontcolorlabel = new JLabel();
+		backgroundColorLabel = new JLabel();
 		button2 = new JButton();
 		scrollPane1 = new JScrollPane();
 		list1 = new JList();
@@ -143,6 +168,34 @@ public class ChatRoom extends JFrame {
 			inputTextArea.setPreferredSize(new Dimension(200, 25));
 			panel2.add(inputTextArea);
 
+			//======== panel3 ========
+			{
+				panel3.setLayout(new FlowLayout());
+
+				//---- fontcolorlabel ----
+				fontcolorlabel.setText("A");
+				fontcolorlabel.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						fontcolorlabelMouseClicked(e);
+					}
+				});
+				panel3.add(fontcolorlabel);
+
+				//---- backgroundColorLabel ----
+				backgroundColorLabel.setText("       ");
+				backgroundColorLabel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+				backgroundColorLabel.setOpaque(true);
+				backgroundColorLabel.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						backgroundColorLabelMouseClicked(e);
+					}
+				});
+				panel3.add(backgroundColorLabel);
+			}
+			panel2.add(panel3);
+
 			//---- button2 ----
 			button2.setText("\u767c\u9001");
 			button2.addActionListener(e -> sendTextButtonClick(e));
@@ -169,6 +222,9 @@ public class ChatRoom extends JFrame {
 	private JButton button1;
 	private JPanel panel2;
 	private JTextArea inputTextArea;
+	private JPanel panel3;
+	private JLabel fontcolorlabel;
+	private JLabel backgroundColorLabel;
 	private JButton button2;
 	private JScrollPane scrollPane1;
 	private JList list1;

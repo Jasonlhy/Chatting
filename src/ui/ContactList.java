@@ -23,6 +23,7 @@ import project.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author J J
@@ -150,8 +151,18 @@ public class ContactList extends JFrame {
 			hisChatRoom.requestFocus();
 			hisChatRoom.loadChatRecords(messages);
 		} else {
-			// new create
+			// new create "push" message from server without exisiting chatroom
+			Optional<User> chatWith = contactsList.parallelStream()
+							.filter(contact -> contact.getAccount().equals(username))
+							.findFirst();
 			
+			if (chatWith.isPresent()){
+				// new create
+				ChatRoom chatRoom = new ChatRoom(currentUser, chatWith.get());
+				chatRoom.setVisible(true);
+				chatrooms.put(username, chatRoom);
+				SingleClient.sent(new Info("chatlog", currentUser.getAccount(), username));
+			}
 		}
 	}
 	

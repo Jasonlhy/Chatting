@@ -32,6 +32,21 @@ new FormModel {
 					"minimumSize": new java.awt.Dimension( 350, 25 )
 					"preferredSize": new java.awt.Dimension( 200, 25 )
 				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "fontcolorlabel"
+						"text": "A"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "fontcolorlabelMouseClicked", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "backgroundColorLabel"
+						"text": "       "
+						"border": new javax.swing.border.BevelBorder( 1, null, null, null, null )
+						"opaque": true
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "backgroundColorLabelMouseClicked", true ) )
+					} )
+				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button2"
 					"text": "發送"
