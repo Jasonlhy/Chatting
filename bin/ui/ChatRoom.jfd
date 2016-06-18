@@ -10,7 +10,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label1"
+					name: "statusLabel"
 					"text": "Status...."
 					"preferredSize": new java.awt.Dimension( 120, 15 )
 				} )
@@ -34,6 +34,11 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
 					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "fontLabel"
+						"text": "T"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "fontLabelMouseClicked", true ) )
+					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "fontcolorlabel"
 						"text": "A"

@@ -20,5 +20,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/chat/lib/beansbinding-doc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jfontchooser-1.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

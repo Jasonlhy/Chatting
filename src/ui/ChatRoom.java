@@ -17,6 +17,7 @@ import javax.swing.event.ListDataListener;
 import project.Info;
 import project.SingleClient;
 import project.User;
+import say.swing.JFontChooser;
 
 /**
  * @author J J
@@ -27,6 +28,7 @@ public class ChatRoom extends JFrame {
 	public List<String> log = new ArrayList<String>();
 	private Color currentColor;
 	private Color currentBackground;
+	private Font currentFont;
 	
 	public ChatRoom(User user, User user2) {
 		currentUser = user;
@@ -34,7 +36,9 @@ public class ChatRoom extends JFrame {
 		initComponents();
 		setTitle("¥¿©M" + user2.getAccount() + "²á¤Ñ...");
 		
+		statusLabel.setText(user2.getStat());
 		currentColor = list1.getForeground();
+		currentFont = list1.getFont();
 		currentBackground = list1.getBackground();
 		list1.setCellRenderer(new MyCellRenderer());
 	}
@@ -54,7 +58,7 @@ public class ChatRoom extends JFrame {
 	       
 	         setBackground(currentBackground);
 	         setForeground(currentColor);
-	         setFont(list.getFont());
+	         setFont(currentFont);
 	         setOpaque(true); // paint yellow pixel
 	         
 	        // System.out.println("called cell render");
@@ -112,17 +116,29 @@ public class ChatRoom extends JFrame {
 		backgroundColorLabel.setBackground(chosenColor);
 		list1.repaint();
 	}
+
+	private void fontLabelMouseClicked(MouseEvent e) {
+		JFontChooser fontChooser = new JFontChooser();
+		fontChooser.setSelectedFont(currentFont);
+		int option = fontChooser.showDialog(null);
+		Font chosenFont = fontChooser.getSelectedFont();
+		if (option == JFontChooser.OK_OPTION && chosenFont != null){
+			currentFont = chosenFont;
+		}
+		list1.repaint();
+	}
 	
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - J J
 		panel1 = new JPanel();
-		label1 = new JLabel();
+		statusLabel = new JLabel();
 		hSpacer1 = new JPanel(null);
 		button1 = new JButton();
 		panel2 = new JPanel();
 		inputTextArea = new JTextArea();
 		panel3 = new JPanel();
+		fontLabel = new JLabel();
 		fontcolorlabel = new JLabel();
 		backgroundColorLabel = new JLabel();
 		button2 = new JButton();
@@ -146,10 +162,10 @@ public class ChatRoom extends JFrame {
 
 			panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
 
-			//---- label1 ----
-			label1.setText("Status....");
-			label1.setPreferredSize(new Dimension(120, 15));
-			panel1.add(label1);
+			//---- statusLabel ----
+			statusLabel.setText("Status....");
+			statusLabel.setPreferredSize(new Dimension(120, 15));
+			panel1.add(statusLabel);
 			panel1.add(hSpacer1);
 
 			//---- button1 ----
@@ -171,6 +187,16 @@ public class ChatRoom extends JFrame {
 			//======== panel3 ========
 			{
 				panel3.setLayout(new FlowLayout());
+
+				//---- fontLabel ----
+				fontLabel.setText("T");
+				fontLabel.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						fontLabelMouseClicked(e);
+					}
+				});
+				panel3.add(fontLabel);
 
 				//---- fontcolorlabel ----
 				fontcolorlabel.setText("A");
@@ -217,12 +243,13 @@ public class ChatRoom extends JFrame {
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - J J
 	private JPanel panel1;
-	private JLabel label1;
+	private JLabel statusLabel;
 	private JPanel hSpacer1;
 	private JButton button1;
 	private JPanel panel2;
 	private JTextArea inputTextArea;
 	private JPanel panel3;
+	private JLabel fontLabel;
 	private JLabel fontcolorlabel;
 	private JLabel backgroundColorLabel;
 	private JButton button2;

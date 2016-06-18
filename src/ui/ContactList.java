@@ -39,6 +39,7 @@ public class ContactList extends JFrame {
 	private User currentUser;
 	
 	// used id , chatroom object
+	// as long as the chat room is hold by this hashmap, it will not be released by garbge collection
 	private HashMap<String, ChatRoom> chatrooms = new HashMap<String, ChatRoom>();
 	
 	public ContactList(User user){
