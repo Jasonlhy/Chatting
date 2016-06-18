@@ -88,6 +88,10 @@ public class SearchUserFrame extends JFrame {
 		}
 	}
 
+	private void resultListMouseClicked(MouseEvent e) {
+		// TODO add your code here
+	}
+
 	
 
 	private void initComponents() {
@@ -101,7 +105,7 @@ public class SearchUserFrame extends JFrame {
 		searchTextField = new JTextField();
 		button1 = new JButton();
 		scrollPane1 = new JScrollPane();
-		resultList = new JList<String>();
+		resultList = new JList();
 
 		//======== this ========
 		setTitle("Chating!!");
@@ -161,6 +165,12 @@ public class SearchUserFrame extends JFrame {
 			{
 
 				//---- resultList ----
+				resultList.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						resultListMouseClicked(e);
+					}
+				});
 				resultList.addListSelectionListener(e -> resultListValueChanged(e));
 				scrollPane1.setViewportView(resultList);
 			}
@@ -182,6 +192,6 @@ public class SearchUserFrame extends JFrame {
 	private JTextField searchTextField;
 	private JButton button1;
 	private JScrollPane scrollPane1;
-	private JList<String> resultList;
+	private JList resultList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

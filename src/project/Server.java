@@ -133,7 +133,7 @@ public class Server extends JFrame{
 							if(index!=-1&&users.get(index).getPassword().equals(u2.getPassword())){        //successful
 								addUser(u2.getAccount());
 								show(name+" log in at "+ socket.getInetAddress()+" : "+ socket.getPort());
-								sendMessage(new Info("login", u2));
+								sendMessage(new Info("login", users.get(index)));
 								/*
 								if(onlineUser.contains(u2.getAccount())){
 									sendMessage(new Info("loginer", "The account has been logged in."));
@@ -181,9 +181,12 @@ public class Server extends JFrame{
 						}else if(s.equals("searchname")){
 							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';", 0);
 							sendMessage(new Info("searchname", us));
-						}else if(s.equals("setuser")){
+						}else if(s.equals("userfile")){
 							db.setUserFile(l.getUser());
-							sendMessage(new Info("renewuser", l.getUser()));
+							int index = User.getIndex(users, l.getUser());
+							users.set(index, l.getUser());
+							show(l.getUser().getAccount()+" "+l.getUser().getPassword()+" "+l.getUser().getStat());
+							//sendMessage(new Info("renewuser", l.getUser()));
 						}
 					}
 				} catch(SocketException e){

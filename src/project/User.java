@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	private String account;
-	private String password;
-	private String stat;
+	private String account = "";
+	private String password = "";
+	private String stat = "";
 	//private ArrayList<User> freind;
 	
 	public User(String id, String pw){
@@ -32,6 +32,12 @@ public class User implements Serializable{
 	}
 	public String getStat(){
 		return stat;
+	}
+	public void setPassword(String p){
+		password = p;
+	}
+	public void setStat(String s){
+		stat = s;
 	}
 	public static int getIndex(ArrayList<User> us, User u){
 		for(int i=0; i<us.size(); i++){

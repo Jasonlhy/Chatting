@@ -48,9 +48,9 @@ public class Database {
         {
         	User user;
         	if(k==0)
-        		user = new User(rs.getString("id"), rs.getString("pw"));
+        		user = new User(rs.getString("id"), rs.getString("pw"), rs.getString("stat"));
         	else
-        		user = new User(rs.getString("fid"), "");
+        		user = new User(rs.getString("id"), "", rs.getString("stat"));
         	us.add(user);
         }return us;
 	}
@@ -61,7 +61,7 @@ public class Database {
         stat.executeUpdate(sql);
     }
 	public ArrayList<User> getFriendList(String id) throws SQLException{
-		return readU("select * from friend where id=\""+id+"\";", 1);
+		return readU("select * from user where id in (select fid from friend where id=\""+id+"\");", 1);
 	}
 	public ArrayList<User> getSearchID(String id)  throws SQLException{
 		return readU("select * from user where id like '%"+id+"%';", 0);
@@ -69,7 +69,8 @@ public class Database {
 	public void setUserFile(User u) throws SQLException{
 		Statement stat = con.createStatement();
 		String sql = "update user set pw='"+u.getPassword()+"', stat='"+u.getStat()+"' where id='"+u.getAccount()+"';";
-		stat.executeUpdate(sql);
+		int count = stat.executeUpdate(sql);
+		System.out.println("count: " + count);
 	}
 	public void sentRequest(String s1, String s2) throws SQLException{
 		Statement stat = con.createStatement();

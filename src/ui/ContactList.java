@@ -105,14 +105,14 @@ public class ContactList extends JFrame {
 	}
 
 	private void searchUserActionPerformed(ActionEvent e) {
-		// TODO add your code here
 		System.out.println("search user\n");
 		JFrame frame = new SearchUserFrame(currentUser);
 		frame.setVisible(true);
 	}
 
 	private void setProfileActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		JFrame frame = new ProfileFrame(currentUser);
+		frame.setVisible(true);
 	}
 
 	private void userSpaceActionPerformed(ActionEvent e) {
@@ -150,7 +150,6 @@ public class ContactList extends JFrame {
 			//---- menuItem2 ----
 			menuItem2.setText("\u641c\u5c0b\u7528\u6236");
 			menuItem2.addActionListener(e -> {
-			searchUserActionPerformed(e);
 			searchUserActionPerformed(e);
 		});
 			menuBar1.add(menuItem2);

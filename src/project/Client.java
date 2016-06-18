@@ -76,8 +76,10 @@ public class Client {
 		}
 		public void run(){
 			while(true){
-				if(socket.isInputShutdown())
+				if(socket.isInputShutdown()){
+					System.out.println("Server is shutdown");
 					System.exit(-1);
+				} 
 				try{			
 					Object o = this.reader.readObject();
 					if(o instanceof Info){
