@@ -51,11 +51,8 @@ public class ContactList extends JPanel {
 	}
 
 	private void contactListValueChanged(ListSelectionEvent e) {
-		// TODO add your code here
-	}
-
-	private void list1ValueChanged(ListSelectionEvent e) {
-		System.out.println("The conact list is clicked");
+		JFrame chatRoom = new ChatRoom();
+		chatRoom.setVisible(true);
 	}
 
 	private void initComponents() {
@@ -108,7 +105,6 @@ public class ContactList extends JPanel {
 			//---- list1 ----
 			list1.addListSelectionListener(e -> {
 			contactListValueChanged(e);
-			list1ValueChanged(e);
 		});
 			scrollPane1.setViewportView(list1);
 		}

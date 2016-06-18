@@ -1,0 +1,95 @@
+JFDML JFormDesigner: "5.2.3.0.281" Java: "1.8.0_73" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "Chatting!!"
+			"resizable": false
+			"$sizePolicy": 1
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel2"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "登入"
+					"verticalAlignment": 3
+					"font": new java.awt.Font( "新細明體", 1, 22 )
+					"horizontalAlignment": 0
+					"preferredSize": new java.awt.Dimension( 44, 66 )
+					"minimumSize": new java.awt.Dimension( 44, 66 )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel3"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+						name: "panel4"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label4"
+							"text": "名稱："
+							"preferredSize": new java.awt.Dimension( 55, 30 )
+							"horizontalAlignment": 4
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField1"
+							"preferredSize": new java.awt.Dimension( 100, 21 )
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel5"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label3"
+								"text": "密碼："
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField2"
+								"preferredSize": new java.awt.Dimension( 100, 21 )
+							} )
+						} )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+						"axis": 1
+					} ) {
+						name: "panel6"
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+							name: "panel7"
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button1"
+								"text": "登入"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loginButtonActionPerformed", true ) )
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button2"
+								"text": "註冊"
+							} )
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+							"alignment": 0
+							"hgap": 100
+						} ) {
+							name: "panel8"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label5"
+								"text": "text"
+								"opaque": true
+								"preferredSize": new java.awt.Dimension( 200, 15 )
+								"font": new java.awt.Font( "新細明體", 0, 18 )
+								"horizontalAlignment": 0
+								"foreground": sfield java.awt.Color red
+							} )
+						} )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}
