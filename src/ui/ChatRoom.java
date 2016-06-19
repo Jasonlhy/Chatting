@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -169,10 +170,13 @@ public class ChatRoom extends JFrame implements WindowListener {
 			File file = chooser.getSelectedFile();
 			try {
 				FileInputStream fileStream = new FileInputStream(file);
-				ObjectInputStream objectInputStream = null;
+				int totalSize = (int) file.length();
+				System.out.println("total size: " + totalSize);
+				byte[] bytes = new byte[totalSize];
+			
 				try {
-					objectInputStream = new ObjectInputStream(fileStream);
-					SingleClient.sent(new Info("file", toUser.getAccount(), chooser.getSelectedFile().getName(), objectInputStream));
+					fileStream.read(bytes, 0, totalSize);
+					SingleClient.sent(new Info("file", toUser.getAccount(), chooser.getSelectedFile().getName(), bytes));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

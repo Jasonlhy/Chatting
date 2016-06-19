@@ -1,8 +1,6 @@
 package project;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.ObjectInputStream;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -23,7 +21,7 @@ public class Info implements Serializable{
 	private String information4 = "";
 	private String information5 = "";
 	private ImageIcon img;
-	private ObjectInputStream file;
+	private byte[] file;
 	private User u;
 	public ArrayList<User> us;
 	public ArrayList<String> strs;
@@ -60,7 +58,7 @@ public class Info implements Serializable{
 		information2 = info2;
 		img = im;
 	}
-	public Info(String info, String info2, String info3, ObjectInputStream f){
+	public Info(String info, String info2, String info3, byte[] f){
 		information = info;
 		information2 = info2;
 		information3 = info3;
@@ -92,7 +90,7 @@ public class Info implements Serializable{
 	public ImageIcon getImage(){
 		return img;
 	}
-	public ObjectInputStream getFile(){
+	public byte[] getFile(){
 		return file;
 	}
 	public User getUser(){
