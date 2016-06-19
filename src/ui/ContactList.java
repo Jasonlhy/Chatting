@@ -45,8 +45,12 @@ public class ContactList extends JFrame {
 	public static ContactList getCurrentContentList() {
 		return currentContentList;
 	}
+	
 
 	private User currentUser;
+	
+	/* Only one article frame */
+	private ArticleFrame currentAricleFrame;
 
 	// used id , chatroom object
 	// By default, the created chat room is hided only, will not release any memory
@@ -71,6 +75,8 @@ public class ContactList extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				JOptionPane.showMessageDialog(null, "登出成功!!");
+				LoginFrame frame = new LoginFrame();
+				frame.setVisible(true);
 			}
 
 			@Override
@@ -124,7 +130,10 @@ public class ContactList extends JFrame {
 					public String getElementAt(int index) {
 						// return contactsList.get(index);
 						User user = contactsList.get(index);
-						return user.getAccount() + " - " + user.getStat();
+						if(user.getKnow())
+							return user.getAccount() + " - " + user.getStat();
+						else
+							return user.getAccount() + " (Stranger) - " + user.getStat();
 					}
 
 					@Override
@@ -174,7 +183,15 @@ public class ContactList extends JFrame {
 	}
 
 	private void userSpaceActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		if (currentAricleFrame == null){
+			ArticleFrame frame = new ArticleFrame(currentUser);
+			frame.setVisible(true);
+			currentAricleFrame = frame;
+		} else {
+			currentAricleFrame.requestFocus();
+		}
+		
+		SingleClient.sent(new Info("article", currentUser.getAccount()));
 	}
 	
 	/*
@@ -235,9 +252,14 @@ public class ContactList extends JFrame {
 		JFrame frame = new ImagePreviewFrame(imageIcon, "由" + fromUsername + "得到圖片");
 		frame.setVisible(true);
 	}
-
+	
+	
+	public void receivedArticle(List<String> articles){
+		currentAricleFrame.loadArticles(articles);
+	}
+	
 	/**
-	 * Transform the byte fro received file to the byte ot new/existing file
+	 * Transform the byte from received file to the byte to new/existing file
 	 * 
 	 * @param fromUsername
 	 * @param receivedFile
@@ -284,46 +306,45 @@ public class ContactList extends JFrame {
 		scrollPane1 = new JScrollPane();
 		list1 = new JList();
 
-		// ======== this ========
+		//======== this ========
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		// ======== menuBar1 ========
+		//======== menuBar1 ========
 		{
 
-			// ---- menuItem2 ----
+			//---- menuItem2 ----
 			menuItem2.setText("\u641c\u5c0b\u7528\u6236");
 			menuItem2.addActionListener(e -> {
-				searchUserActionPerformed(e);
-			});
+			searchUserActionPerformed(e);
+		});
 			menuBar1.add(menuItem2);
 
-			// ---- menuItem3 ----
+			//---- menuItem3 ----
 			menuItem3.setText("\u500b\u4eba\u8a2d\u5b9a");
 			menuItem3.addActionListener(e -> setProfileActionPerformed(e));
 			menuBar1.add(menuItem3);
 
-			// ---- menuItem1 ----
+			//---- menuItem1 ----
 			menuItem1.setText("\u7a7a\u9593");
 			menuItem1.addActionListener(e -> userSpaceActionPerformed(e));
 			menuBar1.add(menuItem1);
 		}
 		contentPane.add(menuBar1, BorderLayout.NORTH);
 
-		// ======== scrollPane1 ========
+		//======== scrollPane1 ========
 		{
 
-			// ---- list1 ----
+			//---- list1 ----
 			list1.addListSelectionListener(e -> {
-				contactListValueChanged(e);
-				list1ValueChanged(e);
-			});
+			contactListValueChanged(e);
+			list1ValueChanged(e);
+		});
 			scrollPane1.setViewportView(list1);
 		}
 		contentPane.add(scrollPane1, BorderLayout.CENTER);
 		setSize(500, 515);
 		setLocationRelativeTo(getOwner());
-		// JFormDesigner - End of component initialization
 		// //GEN-END:initComponents
 	}
 
@@ -335,7 +356,7 @@ public class ContactList extends JFrame {
 	private JMenuItem menuItem3;
 	private JMenuItem menuItem1;
 	private JScrollPane scrollPane1;
-	private JList<String> list1;
+	private JList list1;
 	// JFormDesigner - End of variables declaration //GEN-END:variables
 
 }

@@ -9,6 +9,7 @@ public class User implements Serializable{
 	private String account = "";
 	private String password = "";
 	private String stat = "";
+	private boolean know = true;
 	//private ArrayList<User> freind;
 	
 	public User(String id, String pw){
@@ -24,6 +25,12 @@ public class User implements Serializable{
 		password = pw;
 		stat = st;
 	}
+	public User(String id, String pw, String st, boolean b){
+		account = id;
+		password = pw;
+		stat = st;
+		know = b;
+	}
 	public String getAccount(){
 		return account;
 	}
@@ -38,6 +45,9 @@ public class User implements Serializable{
 	}
 	public void setStat(String s){
 		stat = s;
+	}
+	public boolean getKnow(){
+		return know;
 	}
 	public static int getIndex(ArrayList<User> us, User u){
 		for(int i=0; i<us.size(); i++){

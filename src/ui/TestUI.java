@@ -18,29 +18,8 @@ import project.User;
 public class TestUI {
 
 	public static void main(String[] args) {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), "filename")); // default to the same name as user b file
-
-		int retrival = chooser.showSaveDialog(null);
-		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try {
-				System.out.println("selected File: ()" + chooser.getSelectedFile());
-				File destFile = chooser.getSelectedFile();
-
-				/*
-				FileInputStream fileInputStream = new FileInputStream(receivedFile);
-				FileChannel src = fileInputStream.getChannel();
-				FileOutputStream fileOutputStream = new FileOutputStream(destFile);
-				FileChannel dest = fileOutputStream.getChannel();
-				dest.transferFrom(src, 0, src.size());
-				
-				fileInputStream.close();
-				fileOutputStream.close(); */
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-
+		ArticleFrame frame = new ArticleFrame(null);
+		frame.setVisible(true);
 	}
 
 }

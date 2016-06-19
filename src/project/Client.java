@@ -112,7 +112,7 @@ public class Client {
 								mainScreen.loadFriendList();
 							}
 						}else if(s1.equals("chat")){
-							ArrayList<String> log = l.getChat();
+							ArrayList<String> log = l.getStr();
 							
 							for(int i=0; i<log.size(); i++){
 								System.out.println(log.get(i));
@@ -125,6 +125,12 @@ public class Client {
 							ContactList.getCurrentContentList().receivedImage(s2, l.getImage());
 						}else if(s1.equals("file")){
 							ContactList.getCurrentContentList().receivedFile(s2, l.getFile(), s3);
+						}else if(s1.equals("article")){
+							 ArrayList<String> articles = l.getStr();
+							 for(int i=0; i<articles.size(); i++){
+								 System.out.println(articles.get(i));
+							 }System.out.println("!!!");
+							 ContactList.getCurrentContentList().receivedArticle(articles);
 						}
 					}
 				} catch(SocketException e){

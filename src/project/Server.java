@@ -170,14 +170,14 @@ public class Server extends JFrame{
 							userToAddr.remove(name);
 							name = null;
 						}else if(s.equals("friend")){
-							sendMessage(new Info("friend", db.getFriendList(s2)));
+							sendMessage(new Info("friend", db.getFriendList(s2, true)));
 						}else if(s.equals("searchid")){
 							sendMessage(new Info("searchid", db.getSearchID(s2)));
 						}else if(s.equals("request")){
 							db.sentRequest(s2, s3);
 							//sendMessage(new Info("friend", db.getFriendList(s2)));
 							if(onlineUser.contains(s3)){
-								userToAddr.get(s3).sendMessage(new Info("friendnew", db.getFriendList(s3)));
+								userToAddr.get(s3).sendMessage(new Info("friendnew", db.getFriendList(s3, true)));
 							}
 						}else if(s.equals("searchname")){
 							ArrayList<User> us = db.readU("select * from user where name like '%"+s2+"%';", 0);
@@ -187,6 +187,13 @@ public class Server extends JFrame{
 							int index = User.getIndex(users, l.getUser());
 							users.set(index, l.getUser());
 							show(l.getUser().getAccount()+" "+l.getUser().getPassword()+" "+l.getUser().getStat());
+							ArrayList<User> friendu = db.getFriendList(l.getUser().getAccount(), false);
+							for(int i=0; i<friendu.size(); i++){
+								String friendname = friendu.get(i).getAccount();
+								if(onlineUser.contains(friendname)){
+									userToAddr.get(friendname).sendMessage(new Info("friendnew", db.getFriendList(friendname, true)));
+								}
+							}
 							//sendMessage(new Info("renewuser", l.getUser()));
 						}else if(s.equals("chat")){
 							db.chat(s2, s3, s4, s5);
@@ -204,6 +211,18 @@ public class Server extends JFrame{
 						}else if(s.equals("file")){
 							if(onlineUser.contains(s2)){
 								userToAddr.get(s2).sendMessage(new Info("file", name, s3, l.getFile()));
+							}
+						}else if(s.equals("article")){
+							sendMessage(new Info("article", "",  db.getArticles(s2)));
+						}else if(s.equals("write")){
+							db.write(s2, s3, s4);
+							sendMessage(new Info("article", "",  db.getArticles(s2)));
+							ArrayList<User> friendu = db.getFriendList(s2, false);
+							for(int i=0; i<friendu.size(); i++){
+								String friendname = friendu.get(i).getAccount();
+								if(onlineUser.contains(friendname)){
+									userToAddr.get(friendname).sendMessage(new Info("article", "",  db.getArticles(friendname)));
+								}
 							}
 						}
 					}

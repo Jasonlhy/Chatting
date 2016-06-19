@@ -100,7 +100,7 @@ public class Info implements Serializable{
 	public ArrayList<User> getUsers(){
 		return us;
 	}
-	public ArrayList<String> getChat(){
+	public ArrayList<String> getStr(){
 		return strs;
 	}
 }
