@@ -156,6 +156,17 @@ public class ChatRoom extends JFrame {
 		}
 	}
 
+	private void sendFileActionPerformed(ActionEvent e) {
+		JFileChooser chooser = new JFileChooser();
+		int returnVal = chooser.showOpenDialog(null);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+			File file = chooser.getSelectedFile();
+			
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY
 		// //GEN-BEGIN:initComponents
@@ -163,6 +174,7 @@ public class ChatRoom extends JFrame {
 		panel1 = new JPanel();
 		statusLabel = new JLabel();
 		hSpacer1 = new JPanel(null);
+		button3 = new JButton();
 		button1 = new JButton();
 		panel2 = new JPanel();
 		inputTextArea = new JTextArea();
@@ -196,6 +208,11 @@ public class ChatRoom extends JFrame {
 			statusLabel.setPreferredSize(new Dimension(120, 15));
 			panel1.add(statusLabel);
 			panel1.add(hSpacer1);
+
+			//---- button3 ----
+			button3.setText("\u50b3\u9001\u5716\u6848");
+			button3.addActionListener(e -> sendFileActionPerformed(e));
+			panel1.add(button3);
 
 			//---- button1 ----
 			button1.setText("\u50b3\u9001\u5716\u7247");
@@ -276,6 +293,7 @@ public class ChatRoom extends JFrame {
 	private JPanel panel1;
 	private JLabel statusLabel;
 	private JPanel hSpacer1;
+	private JButton button3;
 	private JButton button1;
 	private JPanel panel2;
 	private JTextArea inputTextArea;

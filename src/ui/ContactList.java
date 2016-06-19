@@ -7,7 +7,11 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,55 +32,60 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * The contact list main menu, also used as object who received the broadcast
+ * message from server background thread
+ * 
  * @author J J
  */
 public class ContactList extends JFrame {
-	
+
 	// get activated contnet list window
 	private static ContactList currentContentList;
-	public static ContactList getCurrentContentList(){
+
+	public static ContactList getCurrentContentList() {
 		return currentContentList;
 	}
-	
+
 	private User currentUser;
-	
+
 	// used id , chatroom object
-	// as long as the chat room is hold by this hashmap, it will not be released by garbge collection
+	// as long as the chat room is hold by this hashmap, it will not be released
+	// by garbge collection
 	private HashMap<String, ChatRoom> chatrooms = new HashMap<String, ChatRoom>();
-	
-	public ContactList(User user){
+
+	public ContactList(User user) {
 		currentContentList = this;
 		currentUser = user;
-		
+
 		loadFriendList();
 		initComponents();
 		setTitle("歡迎!! " + user.getAccount());
 	}
-	
-	public void loadFriendList(){
+
+	public void loadFriendList() {
 		// clear the list
 		contactsList.clear();
 		System.out.println("load contact list by contactlist: " + contactsList.size());
-		SingleClient.sent(new Info("friend", currentUser.getAccount()), new ResponseCallback(){
+		SingleClient.sent(new Info("friend", currentUser.getAccount()), new ResponseCallback() {
 
 			@Override
 			public void successResponse(Object o) {
-				List<User> friends = (List<User>)o;
+				List<User> friends = (List<User>) o;
 				contactsList.addAll(friends);
-				
+
 				System.out.println("add fake contat list");
-				list1.setModel(new ListModel<String>(){
+				list1.setModel(new ListModel<String>() {
 
 					@Override
 					public void addListDataListener(ListDataListener l) {
-						
+
 					}
 
 					@Override
 					public String getElementAt(int index) {
 						// return contactsList.get(index);
 						User user = contactsList.get(index);
-						return  user.getAccount() + " - " + user.getStat();
+						return user.getAccount() + " - " + user.getStat();
 					}
 
 					@Override
@@ -86,9 +95,9 @@ public class ContactList extends JFrame {
 
 					@Override
 					public void removeListDataListener(ListDataListener l) {
-						
+
 					}
-					
+
 				});
 				list1.repaint();
 			}
@@ -97,13 +106,12 @@ public class ContactList extends JFrame {
 			public void failedResponse(Object o) {
 				// ignore
 			}
-			
+
 		});
-	
+
 	}
-	
+
 	private List<User> contactsList = new ArrayList<User>();
-	
 
 	public List<User> getContactsList() {
 		return contactsList;
@@ -129,10 +137,10 @@ public class ContactList extends JFrame {
 	}
 
 	private void contactListValueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()){
+		if (!e.getValueIsAdjusting()) {
 			int index = e.getFirstIndex();
 			String chatWithAccount = contactsList.get(index).getAccount();
-			if (chatrooms.containsKey(chatWithAccount)){
+			if (chatrooms.containsKey(chatWithAccount)) {
 				ChatRoom hisChatRoom = chatrooms.get(chatWithAccount);
 				hisChatRoom.setVisible(true);
 				hisChatRoom.requestFocus();
@@ -147,8 +155,8 @@ public class ContactList extends JFrame {
 	}
 
 	/* receive message for username */
-	public void receivedMessage(String username, List<String> messages){
-		if (chatrooms.containsKey(username)){
+	public void receivedMessage(String username, List<String> messages) {
+		if (chatrooms.containsKey(username)) {
 			ChatRoom hisChatRoom = chatrooms.get(username);
 			hisChatRoom.setVisible(true);
 			hisChatRoom.requestFocus();
@@ -156,10 +164,9 @@ public class ContactList extends JFrame {
 		} else {
 			// new create "push" message from server without exisiting chatroom
 			Optional<User> chatWith = contactsList.parallelStream()
-							.filter(contact -> contact.getAccount().equals(username))
-							.findFirst();
-			
-			if (chatWith.isPresent()){
+					.filter(contact -> contact.getAccount().equals(username)).findFirst();
+
+			if (chatWith.isPresent()) {
 				// new create
 				ChatRoom chatRoom = new ChatRoom(currentUser, chatWith.get());
 				chatRoom.setVisible(true);
@@ -168,18 +175,51 @@ public class ContactList extends JFrame {
 			}
 		}
 	}
-	
-	public void receivedImage(String fromUsername, ImageIcon imageIcon){
+
+	public void receivedImage(String fromUsername, ImageIcon imageIcon) {
 		JFrame frame = new ImagePreviewFrame(imageIcon, "由" + fromUsername + "得到圖片");
 		frame.setVisible(true);
 	}
-	
+
+	/**
+	 * Transform the byte fro received file to the byte ot new/existing file
+	 * 
+	 * @param fromUsername
+	 * @param receivedFile
+	 * @param filename
+	 */
+	public void receivedFile(String fromUsername, File receivedFile, String filename) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), "filename")); // default to the same name as user b file
+
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				System.out.println("selected File: ()" + chooser.getSelectedFile());
+				File destFile = chooser.getSelectedFile();
+
+				FileInputStream fileInputStream = new FileInputStream(receivedFile);
+				FileChannel src = fileInputStream.getChannel();
+				FileOutputStream fileOutputStream = new FileOutputStream(destFile);
+				FileChannel dest = fileOutputStream.getChannel();
+				dest.transferFrom(src, 0, src.size());
+				
+				fileInputStream.close();
+				fileOutputStream.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	}
+
 	private void list1ValueChanged(ListSelectionEvent e) {
 		// TODO add your code here
 	}
 
 	private void initComponents() {
-		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		// JFormDesigner - Component initialization - DO NOT MODIFY
+		// //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - J J
 		menuBar1 = new JMenuBar();
 		menuItem2 = new JMenuItem();
@@ -188,49 +228,51 @@ public class ContactList extends JFrame {
 		scrollPane1 = new JScrollPane();
 		list1 = new JList();
 
-		//======== this ========
+		// ======== this ========
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		//======== menuBar1 ========
+		// ======== menuBar1 ========
 		{
 
-			//---- menuItem2 ----
+			// ---- menuItem2 ----
 			menuItem2.setText("\u641c\u5c0b\u7528\u6236");
 			menuItem2.addActionListener(e -> {
-			searchUserActionPerformed(e);
-		});
+				searchUserActionPerformed(e);
+			});
 			menuBar1.add(menuItem2);
 
-			//---- menuItem3 ----
+			// ---- menuItem3 ----
 			menuItem3.setText("\u500b\u4eba\u8a2d\u5b9a");
 			menuItem3.addActionListener(e -> setProfileActionPerformed(e));
 			menuBar1.add(menuItem3);
 
-			//---- menuItem1 ----
+			// ---- menuItem1 ----
 			menuItem1.setText("\u7a7a\u9593");
 			menuItem1.addActionListener(e -> userSpaceActionPerformed(e));
 			menuBar1.add(menuItem1);
 		}
 		contentPane.add(menuBar1, BorderLayout.NORTH);
 
-		//======== scrollPane1 ========
+		// ======== scrollPane1 ========
 		{
 
-			//---- list1 ----
+			// ---- list1 ----
 			list1.addListSelectionListener(e -> {
-			contactListValueChanged(e);
-			list1ValueChanged(e);
-		});
+				contactListValueChanged(e);
+				list1ValueChanged(e);
+			});
 			scrollPane1.setViewportView(list1);
 		}
 		contentPane.add(scrollPane1, BorderLayout.CENTER);
 		setSize(500, 515);
 		setLocationRelativeTo(getOwner());
-		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+		// JFormDesigner - End of component initialization
+		// //GEN-END:initComponents
 	}
 
-	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	// JFormDesigner - Variables declaration - DO NOT MODIFY
+	// //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - J J
 	private JMenuBar menuBar1;
 	private JMenuItem menuItem2;
@@ -238,6 +280,6 @@ public class ContactList extends JFrame {
 	private JMenuItem menuItem1;
 	private JScrollPane scrollPane1;
 	private JList<String> list1;
-	// JFormDesigner - End of variables declaration  //GEN-END:variables
+	// JFormDesigner - End of variables declaration //GEN-END:variables
 
 }
