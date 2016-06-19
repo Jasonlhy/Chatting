@@ -9,10 +9,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
-
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import project.Info;
 import project.SingleClient;
@@ -23,49 +28,46 @@ import say.swing.JFontChooser;
  * @author J J
  */
 public class ChatRoom extends JFrame {
-	
+
 	private User currentUser, toUser;
 	public List<String> log = new ArrayList<String>();
 	private Color currentColor;
 	private Color currentBackground;
 	private Font currentFont;
-	
+
 	public ChatRoom(User user, User user2) {
 		currentUser = user;
 		toUser = user2;
 		initComponents();
 		setTitle("正和" + user2.getAccount() + "聊天...");
-		
+
 		statusLabel.setText(user2.getStat());
 		currentColor = list1.getForeground();
 		currentFont = list1.getFont();
 		currentBackground = list1.getBackground();
 		list1.setCellRenderer(new MyCellRenderer());
 	}
-	
 
-	 class MyCellRenderer extends JLabel implements ListCellRenderer<Object> {
-	     public Component getListCellRendererComponent(
-	       JList<?> list,           // the list
-	       Object value,            // value to display
-	       int index,               // cell index
-	       boolean isSelected,      // is the cell selected
-	       boolean cellHasFocus)    // does the cell have focus
-	     {
-	         String s = value.toString();
-	         setText(s);
-	    
-	       
-	         setBackground(currentBackground);
-	         setForeground(currentColor);
-	         setFont(currentFont);
-	         setOpaque(true); // paint yellow pixel
-	         
-	        // System.out.println("called cell render");
-	         return this;
-	     }
-	 }
-	 
+	class MyCellRenderer extends JLabel implements ListCellRenderer<Object> {
+		public Component getListCellRendererComponent(JList<?> list, // the list
+				Object value, // value to display
+				int index, // cell index
+				boolean isSelected, // is the cell selected
+				boolean cellHasFocus) // does the cell have focus
+		{
+			String s = value.toString();
+			setText(s);
+
+			setBackground(currentBackground);
+			setForeground(currentColor);
+			setFont(currentFont);
+			setOpaque(true); // paint yellow pixel
+
+			// System.out.println("called cell render");
+			return this;
+		}
+	}
+
 	private void sendTextButtonClick(ActionEvent e) {
 		Date date = new Date();
 		String inputText = inputTextArea.getText();
@@ -73,14 +75,14 @@ public class ChatRoom extends JFrame {
 		inputTextArea.setText("");
 	}
 
-	public void loadChatRecords(List<String> messages){
+	public void loadChatRecords(List<String> messages) {
 		log.clear();
 		log.addAll(messages);
-		list1.setModel(new ListModel<String>(){
+		list1.setModel(new ListModel<String>() {
 
 			@Override
 			public void addListDataListener(ListDataListener l) {
-				
+
 			}
 
 			@Override
@@ -96,9 +98,9 @@ public class ChatRoom extends JFrame {
 
 			@Override
 			public void removeListDataListener(ListDataListener l) {
-				
+
 			}
-			
+
 		});
 	}
 
@@ -122,14 +124,41 @@ public class ChatRoom extends JFrame {
 		fontChooser.setSelectedFont(currentFont);
 		int option = fontChooser.showDialog(null);
 		Font chosenFont = fontChooser.getSelectedFont();
-		if (option == JFontChooser.OK_OPTION && chosenFont != null){
+		if (option == JFontChooser.OK_OPTION && chosenFont != null) {
 			currentFont = chosenFont;
 		}
 		list1.repaint();
 	}
-	
+
+	private void sendImageActionPerformed(ActionEvent e) {
+		JFileChooser chooser = new JFileChooser();
+		int returnVal = chooser.showOpenDialog(null);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+			File file = chooser.getSelectedFile();
+			try {
+				System.out.println("full path: " + file.getAbsolutePath());
+				String fileType = Files.probeContentType(file.toPath());
+				
+				// is it image
+				if (fileType.startsWith("image")){
+					Image image = ImageIO.read(file);
+					System.out.println("filetype: " + fileType);
+					ImageIcon imageIcon = new ImageIcon(image);
+					SingleClient.sent(new Info("image", toUser.getAccount(), imageIcon));
+				} else {
+					JOptionPane.showMessageDialog(null, "你沒有選取圖片");
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
 	private void initComponents() {
-		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		// JFormDesigner - Component initialization - DO NOT MODIFY
+		// //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - J J
 		panel1 = new JPanel();
 		statusLabel = new JLabel();
@@ -170,6 +199,7 @@ public class ChatRoom extends JFrame {
 
 			//---- button1 ----
 			button1.setText("\u50b3\u9001\u5716\u7247");
+			button1.addActionListener(e -> sendImageActionPerformed(e));
 			panel1.add(button1);
 		}
 		contentPane.add(panel1, BorderLayout.NORTH);
@@ -237,10 +267,11 @@ public class ChatRoom extends JFrame {
 		contentPane.add(scrollPane1, BorderLayout.CENTER);
 		setSize(495, 405);
 		setLocationRelativeTo(getOwner());
-		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+		// //GEN-END:initComponents
 	}
 
-	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	// JFormDesigner - Variables declaration - DO NOT MODIFY
+	// //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - J J
 	private JPanel panel1;
 	private JLabel statusLabel;
@@ -255,5 +286,5 @@ public class ChatRoom extends JFrame {
 	private JButton button2;
 	private JScrollPane scrollPane1;
 	private JList list1;
-	// JFormDesigner - End of variables declaration  //GEN-END:variables
+	// JFormDesigner - End of variables declaration //GEN-END:variables
 }

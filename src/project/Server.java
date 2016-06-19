@@ -197,6 +197,10 @@ public class Server extends JFrame{
 						}else if(s.equals("chatlog")){
 							//db.chat(s2, s3, s4, s5);
 							sendMessage(new Info("chat", s3, db.chatlog(s2, s3)));
+						}else if(s.equals("image")){
+							if(onlineUser.contains(s2)){
+								userToAddr.get(s2).sendMessage(new Info("image", name, l.getImage()));
+							}
 						}
 					}
 				} catch(SocketException e){

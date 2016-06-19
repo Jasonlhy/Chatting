@@ -6,8 +6,10 @@ package ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.jdesktop.beansbinding.*;
@@ -165,6 +167,11 @@ public class ContactList extends JFrame {
 				SingleClient.sent(new Info("chatlog", currentUser.getAccount(), username));
 			}
 		}
+	}
+	
+	public void receivedImage(String fromUsername, ImageIcon imageIcon){
+		JFrame frame = new ImagePreviewFrame(imageIcon, "由" + fromUsername + "得到圖片");
+		frame.setVisible(true);
 	}
 	
 	private void list1ValueChanged(ListSelectionEvent e) {

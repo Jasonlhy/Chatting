@@ -20,6 +20,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
 					"text": "傳送圖片"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sendImageActionPerformed", true ) )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

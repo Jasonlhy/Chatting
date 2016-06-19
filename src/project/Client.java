@@ -118,6 +118,10 @@ public class Client {
 							}System.out.println("!!!");
 							String chatWithAccount = s2;
 							ContactList.getCurrentContentList().receivedMessage(chatWithAccount, log);
+						}else if(s1.equals("image")){
+							//s2 = from
+							//l.getImage() = image
+							ContactList.getCurrentContentList().receivedImage(s2, l.getImage());
 						}
 					}
 				} catch(SocketException e){

@@ -1,7 +1,10 @@
 package project;
 
+import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 /*----------------------------
  stat
@@ -17,6 +20,7 @@ public class Info implements Serializable{
 	private String information3 = "";
 	private String information4 = "";
 	private String information5 = "";
+	private ImageIcon img;
 	private User u;
 	public ArrayList<User> us;
 	public ArrayList<String> strs;
@@ -48,6 +52,11 @@ public class Info implements Serializable{
 		information2 = u2;
 		strs = infos;
 	}
+	public Info(String info, String info2, ImageIcon im){
+		information = info;
+		information2 = info2;
+		img = im;
+	}
 	public Info(String info, User u2){
 		information = info;
 		u = u2;
@@ -70,6 +79,9 @@ public class Info implements Serializable{
 	}
 	public String getInfo5(){
 		return information5;
+	}
+	public ImageIcon getImage(){
+		return img;
 	}
 	public User getUser(){
 		return u;
