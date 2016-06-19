@@ -87,6 +87,7 @@ public class Client {
 						Info l = (Info) o;
 						String s1 = l.getInfo();
 						String s2 = l.getInfo2();
+						String s3 = l.getInfo3();
 						
 						if(s1.equals("loginer")){					//login error message
 							//s2 (error message)
@@ -122,6 +123,8 @@ public class Client {
 							//s2 = from
 							//l.getImage() = image
 							ContactList.getCurrentContentList().receivedImage(s2, l.getImage());
+						}else if(s1.equals("file")){
+							ContactList.getCurrentContentList().receivedFile(s2, l.getFile(), s3);
 						}
 					}
 				} catch(SocketException e){

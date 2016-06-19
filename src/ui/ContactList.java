@@ -190,7 +190,8 @@ public class ContactList extends JFrame {
 	 */
 	public void receivedFile(String fromUsername, File receivedFile, String filename) {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), "filename")); // default to the same name as user b file
+		chooser.setDialogTitle(fromUsername+" ¶Ç°e  "+filename+" µ¹§A...");
+		chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), filename)); // default to the same name as user b file
 
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {

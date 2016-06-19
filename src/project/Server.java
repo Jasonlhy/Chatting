@@ -201,6 +201,10 @@ public class Server extends JFrame{
 							if(onlineUser.contains(s2)){
 								userToAddr.get(s2).sendMessage(new Info("image", name, l.getImage()));
 							}
+						}else if(s.equals("file")){
+							if(onlineUser.contains(s2)){
+								userToAddr.get(s2).sendMessage(new Info("file", name, s3, l.getFile()));
+							}
 						}
 					}
 				} catch(SocketException e){

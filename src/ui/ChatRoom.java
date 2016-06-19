@@ -163,7 +163,7 @@ public class ChatRoom extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
 			File file = chooser.getSelectedFile();
-			
+			SingleClient.sent(new Info("file", toUser.getAccount(), chooser.getSelectedFile().getName(), file));
 		}
 	}
 
