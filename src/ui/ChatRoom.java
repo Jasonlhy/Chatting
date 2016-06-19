@@ -34,6 +34,7 @@ public class ChatRoom extends JFrame implements WindowListener {
 	private Color currentColor;
 	private Color currentBackground;
 	private Font currentFont;
+	private boolean isSharing = false;
 
 	public ChatRoom(User user, User user2) {
 		currentUser = user;
@@ -168,7 +169,16 @@ public class ChatRoom extends JFrame implements WindowListener {
 	}
 
 	private void screenSharingActionPerformed(ActionEvent e) {
-		SingleClient.sent(new Info("screen", toUser.getAccount()));
+		if (!isSharing){
+			SingleClient.sent(new Info("screen", toUser.getAccount()));
+			isSharing = true;
+			button4.setText("°±¤î");
+		} else {
+			ContactList.getCurrentContentList().stopSharing();
+			isSharing = false;
+			button4.setText("«Ì¹õ¤À¨É");
+		}
+		
 		// ContactList.getCurrentContentList().startSendScreen("127.0.0.1");
 	}
 

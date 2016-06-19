@@ -271,15 +271,16 @@ public class ContactList extends JFrame {
 	 * Start as a sender for screen sharing
 	 * 
 	 * @param remoteAddress Receiver address
+	 * @param remotePort 
+	 * @param localPort 
 	 */
-	public void startSendScreen(String remoteAddress){
+	public void startSendScreen(String remoteAddress, String localPort, String remotePort){
 		if (this.screenReceiver != null || this.screenSender != null){
 			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
-		String localPort = "5000";
-		String remotePort = "9999";
+
 		LibJitsi.start();
 		try {
 			// Create a audio transmit object with the specified params.
@@ -307,15 +308,16 @@ public class ContactList extends JFrame {
 	 * Start as a receiver for screen sharing
 	 * 
 	 * @param remoteAddress Sender address
+	 * @param remotePort2 
+	 * @param localPort2 
 	 */
-	public void startReceiveScreen(String remoteAddress){
+	public void startReceiveScreen(String remoteAddress, String localPort, String remotePort){
 		if (this.screenReceiver != null || this.screenSender != null){
 			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
-		String localPort = "9999";
-		String remotePort = "5000";
+
 		LibJitsi.start();
 		
 		try {

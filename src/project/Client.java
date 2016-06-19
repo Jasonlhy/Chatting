@@ -134,10 +134,13 @@ public class Client {
 						}else if(s1.equals("ip")){
 							System.out.println(s2+" : "+s3);
 							String remoteAddress = s3;
+							String localPort = l.getInfo4();
+							String remotePort = l.getInfo5();
+							
 							if(s2.equals("send")){
-								ContactList.getCurrentContentList().startSendScreen(remoteAddress);
+								ContactList.getCurrentContentList().startSendScreen(remoteAddress, localPort, remotePort);
 							}else{
-								ContactList.getCurrentContentList().startReceiveScreen(remoteAddress);
+								ContactList.getCurrentContentList().startReceiveScreen(remoteAddress, localPort, remotePort);
 							}
 						}
 					}

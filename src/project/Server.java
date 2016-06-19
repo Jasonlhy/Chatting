@@ -10,7 +10,11 @@ import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -232,9 +236,25 @@ public class Server extends JFrame{
 								}
 							}
 						}else if(s.equals("screen")){
+							Random rng = new Random();
+							int numbersNeeded = 2;
+							Set<Integer> generated = new LinkedHashSet<Integer>();
+							while (generated.size() < numbersNeeded){
+								// generated random number from 10000..20000
+								// number 0...10000 + 10000
+							    Integer next = rng.nextInt(10001) + 10000; 
+							    generated.add(next);
+							}
+							
+							Integer[] numbers = new Integer[2];
+							generated.toArray(numbers);
+							String senderPort = numbers[0].toString();
+							String receiverPort = numbers[1].toString();
+							show("send port + senderPort +" + senderPort + " + reciverPort: "+ receiverPort);
+							
 							if(onlineUser.contains(s2)){
-								sendMessage(new Info("ip", "send", userToAddr.get(s2).getIP()));
-								userToAddr.get(s2).sendMessage(new Info("ip", "get", userToAddr.get(name).getIP()));
+								sendMessage(new Info("ip", "send", userToAddr.get(s2).getIP(), senderPort, receiverPort));
+								userToAddr.get(s2).sendMessage(new Info("ip", "get", userToAddr.get(name).getIP(), receiverPort, senderPort));
 							}
 						}
 					}
