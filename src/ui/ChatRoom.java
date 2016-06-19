@@ -27,7 +27,7 @@ import say.swing.JFontChooser;
 /**
  * @author J J
  */
-public class ChatRoom extends JFrame {
+public class ChatRoom extends JFrame implements WindowListener {
 
 	private User currentUser, toUser;
 	public List<String> log = new ArrayList<String>();
@@ -210,7 +210,7 @@ public class ChatRoom extends JFrame {
 			panel1.add(hSpacer1);
 
 			//---- button3 ----
-			button3.setText("\u50b3\u9001\u5716\u6848");
+			button3.setText("\u50b3\u9001\u6a94\u6848");
 			button3.addActionListener(e -> sendFileActionPerformed(e));
 			panel1.add(button3);
 
@@ -305,4 +305,40 @@ public class ChatRoom extends JFrame {
 	private JScrollPane scrollPane1;
 	private JList list1;
 	// JFormDesigner - End of variables declaration //GEN-END:variables
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		System.out.println("Main menu is closed!!!!");
+		this.dispose();
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		
+	}
 }

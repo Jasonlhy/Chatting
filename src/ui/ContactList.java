@@ -49,8 +49,7 @@ public class ContactList extends JFrame {
 	private User currentUser;
 
 	// used id , chatroom object
-	// as long as the chat room is hold by this hashmap, it will not be released
-	// by garbge collection
+	// By default, the created chat room is hided only, will not release any memory
 	private HashMap<String, ChatRoom> chatrooms = new HashMap<String, ChatRoom>();
 
 	public ContactList(User user) {
@@ -60,6 +59,46 @@ public class ContactList extends JFrame {
 		loadFriendList();
 		initComponents();
 		setTitle("歡迎!! " + user.getAccount());
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		// logout itself
+		this.addWindowListener(new WindowListener(){
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				JOptionPane.showMessageDialog(null, "登出成功!!");
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				
+			}
+			
+		});
 	}
 
 	public void loadFriendList() {
@@ -123,45 +162,60 @@ public class ContactList extends JFrame {
 
 	private void searchUserActionPerformed(ActionEvent e) {
 		System.out.println("search user\n");
-		JFrame frame = new SearchUserFrame(currentUser);
+		SearchUserFrame frame = new SearchUserFrame(currentUser);
 		frame.setVisible(true);
+		this.addWindowListener(frame);
 	}
 
 	private void setProfileActionPerformed(ActionEvent e) {
-		JFrame frame = new ProfileFrame(currentUser);
+		ProfileFrame frame = new ProfileFrame(currentUser);
 		frame.setVisible(true);
+		this.addWindowListener(frame);
 	}
 
 	private void userSpaceActionPerformed(ActionEvent e) {
 		// TODO add your code here
 	}
-
+	
+	/*
+	 * When a contact is select in the list
+	 */
 	private void contactListValueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
 			int index = e.getFirstIndex();
 			String chatWithAccount = contactsList.get(index).getAccount();
+			// exsitting chatroom
 			if (chatrooms.containsKey(chatWithAccount)) {
 				ChatRoom hisChatRoom = chatrooms.get(chatWithAccount);
 				hisChatRoom.setVisible(true);
 				hisChatRoom.requestFocus();
 			} else {
+			// not exisitting chatroom
 				ChatRoom chatRoom = new ChatRoom(currentUser, contactsList.get(index));
 				chatRoom.setVisible(true);
 				chatrooms.put(chatWithAccount, chatRoom);
+				this.addWindowListener(chatRoom); // tell it to dispose when this application is closed
 				SingleClient.sent(new Info("chatlog", currentUser.getAccount(), contactsList.get(index).getAccount()));
 			}
 			list1.clearSelection();
 		}
 	}
 
-	/* receive message for username */
+	/**
+	 * receive messages from username
+	 *  
+	 * @param username
+	 * @param messages
+	 */
 	public void receivedMessage(String username, List<String> messages) {
+		// exisiting chatroom
 		if (chatrooms.containsKey(username)) {
 			ChatRoom hisChatRoom = chatrooms.get(username);
 			hisChatRoom.setVisible(true);
 			hisChatRoom.requestFocus();
 			hisChatRoom.loadChatRecords(messages);
 		} else {
+			// not exisiting chatoom
 			// new create "push" message from server without exisiting chatroom
 			Optional<User> chatWith = contactsList.parallelStream()
 					.filter(contact -> contact.getAccount().equals(username)).findFirst();
@@ -171,6 +225,7 @@ public class ContactList extends JFrame {
 				ChatRoom chatRoom = new ChatRoom(currentUser, chatWith.get());
 				chatRoom.setVisible(true);
 				chatrooms.put(username, chatRoom);
+				this.addWindowListener(chatRoom); // tell it to dispose when this application is closed
 				SingleClient.sent(new Info("chatlog", currentUser.getAccount(), username));
 			}
 		}

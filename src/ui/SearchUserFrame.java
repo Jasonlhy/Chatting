@@ -21,7 +21,7 @@ import project.User;
 /**
  * @author J J
  */
-public class SearchUserFrame extends JFrame {
+public class SearchUserFrame extends JFrame implements WindowListener {
 	private List<User> searchResults = new ArrayList<User>();
 	private User currentUser;
 	
@@ -193,4 +193,40 @@ public class SearchUserFrame extends JFrame {
 	private JScrollPane scrollPane1;
 	private JList resultList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		System.out.println("Main menu is closed!!!!");
+		this.dispose();
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+;
+	}
 }

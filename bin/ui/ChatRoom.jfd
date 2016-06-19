@@ -19,7 +19,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button3"
-					"text": "傳送圖案"
+					"text": "傳送檔案"
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sendFileActionPerformed", true ) )
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
