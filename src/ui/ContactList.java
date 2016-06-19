@@ -59,7 +59,6 @@ public class ContactList extends JFrame {
 	
 	/* Screen sharing */
 	private ScreenSender screenSender;
-	private ScreenReceiver screenReceiver;
 
 	// used id , chatroom object
 	// By default, the created chat room is hided only, will not release any memory
@@ -275,7 +274,7 @@ public class ContactList extends JFrame {
 	 * @param localPort 
 	 */
 	public void startSendScreen(String remoteAddress, String localPort, String remotePort){
-		if (this.screenReceiver != null || this.screenSender != null){
+		if (this.screenSender != null){
 			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -312,7 +311,7 @@ public class ContactList extends JFrame {
 	 * @param localPort2 
 	 */
 	public void startReceiveScreen(String remoteAddress, String localPort, String remotePort){
-		if (this.screenReceiver != null || this.screenSender != null){
+		if (this.screenSender != null){
 			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -326,7 +325,6 @@ public class ContactList extends JFrame {
 			if (avReceive.initialize()) {
 				avReceive.addSimpleListener("Video");
 				avReceive.start();
-				this.screenReceiver = avReceive;
 				System.out.println("Start receving");
 			} else {
 				System.err.println("Failed to initialize the receiver sessions.");
@@ -347,12 +345,6 @@ public class ContactList extends JFrame {
 		if (screenSender != null){
 			screenSender.stop();
 			screenSender = null;
-			System.out.println("sender transmission ended.");
-		}
-		
-		if (screenReceiver != null){
-			screenReceiver.close();
-			screenReceiver = null;
 			System.out.println("sender transmission ended.");
 		}
 	}
