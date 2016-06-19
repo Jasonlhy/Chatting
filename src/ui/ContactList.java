@@ -315,15 +315,7 @@ public class ContactList extends JFrame {
 	 * @param remotePort2 
 	 * @param localPort2 
 	 */
-	public void startReceiveScreen(String remoteAddress, String localPort, String remotePort){
-		if (this.screenSender != null){
-			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		
-
-		
-		
+	public void startReceiveScreen(String remoteAddress, String localPort, String remotePort){		
 		try {
 			ScreenReceiver avReceive = new ScreenReceiver(localPort, remoteAddress, remotePort);
 
