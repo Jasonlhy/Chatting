@@ -4,10 +4,15 @@ import java.io.IOException;
 
 public class SingleClient {
 	private static Client client;
+	private static String serverAddress = "127.0.0.1";
+	
+	public static void setServerAddress(String addr){
+		serverAddress = addr;
+	}
 	
 	public static Client getClient(){
 		if (client == null){
-			client = new Client("140.114.86.105", 8000);
+			client = new Client(serverAddress, 8000);
 		}
 		
 		return client;

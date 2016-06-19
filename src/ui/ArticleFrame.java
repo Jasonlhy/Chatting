@@ -9,7 +9,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 
-import com.jgoodies.forms.layout.*;
 
 import project.Info;
 import project.SingleClient;

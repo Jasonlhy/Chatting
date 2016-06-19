@@ -17,9 +17,7 @@ import java.nio.channels.FileChannel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
-import org.jdesktop.beansbinding.*;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-import org.jdesktop.swingbinding.*;
+
 import org.jitsi.service.libjitsi.LibJitsi;
 
 import finalproject.communication.ScreenReceiver;
