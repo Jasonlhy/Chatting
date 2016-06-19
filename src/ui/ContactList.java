@@ -73,6 +73,9 @@ public class ContactList extends JFrame {
 		initComponents();
 		setTitle("歡迎!! " + user.getAccount());
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		LibJitsi.start();
+		
 		// logout itself
 		this.addWindowListener(new WindowListener(){
 
@@ -86,6 +89,7 @@ public class ContactList extends JFrame {
 				JOptionPane.showMessageDialog(null, "登出成功!!");
 				LoginFrame frame = new LoginFrame();
 				frame.setVisible(true);
+				LibJitsi.stop();
 			}
 
 			@Override
@@ -114,6 +118,8 @@ public class ContactList extends JFrame {
 			}
 			
 		});
+
+		
 	}
 
 	public void loadFriendList() {
@@ -281,7 +287,7 @@ public class ContactList extends JFrame {
 		}
 		
 
-		LibJitsi.start();
+		
 		try {
 			// Create a audio transmit object with the specified params.
 			ScreenSender at = new ScreenSender(localPort, remoteAddress, remotePort);
@@ -298,9 +304,7 @@ public class ContactList extends JFrame {
 			}
 		} catch (Exception ex){
 			ex.printStackTrace();
-		} finally {
-			LibJitsi.stop();
-		}
+		} 
 	}
 	
 	
@@ -318,7 +322,7 @@ public class ContactList extends JFrame {
 		}
 		
 
-		LibJitsi.start();
+		
 		
 		try {
 			ScreenReceiver avReceive = new ScreenReceiver(localPort, remoteAddress, remotePort);
@@ -333,9 +337,7 @@ public class ContactList extends JFrame {
 			}
 		} catch (Exception ex){
 			ex.printStackTrace();
-		} finally {
-			LibJitsi.stop();
-		}
+		} 
 	}
 	
 	
