@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 
 import javax.imageio.ImageIO;
@@ -164,7 +167,18 @@ public class ChatRoom extends JFrame implements WindowListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
 			File file = chooser.getSelectedFile();
-			SingleClient.sent(new Info("file", toUser.getAccount(), chooser.getSelectedFile().getName(), file));
+			try {
+				FileInputStream fileStream = new FileInputStream(file);
+				ObjectInputStream objectInputStream = null;
+				try {
+					objectInputStream = new ObjectInputStream(fileStream);
+					SingleClient.sent(new Info("file", toUser.getAccount(), chooser.getSelectedFile().getName(), objectInputStream));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 

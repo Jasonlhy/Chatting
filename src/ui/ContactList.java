@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
@@ -355,10 +356,10 @@ public class ContactList extends JFrame {
 	 * Transform the byte from received file to the byte to new/existing file
 	 * 
 	 * @param fromUsername
-	 * @param receivedFile
+	 * @param objectInputStream
 	 * @param filename
 	 */
-	public void receivedFile(String fromUsername, File receivedFile, String filename) {
+	public void receivedFile(String fromUsername, ObjectInputStream objectInputStream, String filename) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle(fromUsername+" ¶Ç°e  "+filename+" µ¹§A...");
 		chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), filename)); // default to the same name as user b file
@@ -368,8 +369,8 @@ public class ContactList extends JFrame {
 			try {
 				System.out.println("selected File: ()" + chooser.getSelectedFile());
 				File destFile = chooser.getSelectedFile();
-
-				FileInputStream fileInputStream = new FileInputStream(receivedFile);
+				
+				FileInputStream fileInputStream = (FileInputStream) objectInputStream.readObject();
 				FileChannel src = fileInputStream.getChannel();
 				FileOutputStream fileOutputStream = new FileOutputStream(destFile);
 				FileChannel dest = fileOutputStream.getChannel();
@@ -377,6 +378,7 @@ public class ContactList extends JFrame {
 				
 				fileInputStream.close();
 				fileOutputStream.close();
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
