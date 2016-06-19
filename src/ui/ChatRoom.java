@@ -167,6 +167,11 @@ public class ChatRoom extends JFrame implements WindowListener {
 		}
 	}
 
+	private void screenSharingActionPerformed(ActionEvent e) {
+		SingleClient.sent(new Info("screen", toUser.getAccount()));
+		// ContactList.getCurrentContentList().startSendScreen("127.0.0.1");
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY
 		// //GEN-BEGIN:initComponents
@@ -174,6 +179,7 @@ public class ChatRoom extends JFrame implements WindowListener {
 		panel1 = new JPanel();
 		statusLabel = new JLabel();
 		hSpacer1 = new JPanel(null);
+		button4 = new JButton();
 		button3 = new JButton();
 		button1 = new JButton();
 		panel2 = new JPanel();
@@ -208,6 +214,11 @@ public class ChatRoom extends JFrame implements WindowListener {
 			statusLabel.setPreferredSize(new Dimension(120, 15));
 			panel1.add(statusLabel);
 			panel1.add(hSpacer1);
+
+			//---- button4 ----
+			button4.setText("\u5c4f\u5e55\u5206\u4eab");
+			button4.addActionListener(e -> screenSharingActionPerformed(e));
+			panel1.add(button4);
 
 			//---- button3 ----
 			button3.setText("\u50b3\u9001\u6a94\u6848");
@@ -293,6 +304,7 @@ public class ChatRoom extends JFrame implements WindowListener {
 	private JPanel panel1;
 	private JLabel statusLabel;
 	private JPanel hSpacer1;
+	private JButton button4;
 	private JButton button3;
 	private JButton button1;
 	private JPanel panel2;

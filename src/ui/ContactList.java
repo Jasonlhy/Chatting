@@ -19,7 +19,10 @@ import javax.swing.event.*;
 import org.jdesktop.beansbinding.*;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.*;
+import org.jitsi.service.libjitsi.LibJitsi;
 
+import finalproject.communication.ScreenReceiver;
+import finalproject.communication.ScreenSender;
 import project.Client;
 import project.Info;
 import project.ResponseCallback;
@@ -36,6 +39,8 @@ import java.util.Optional;
  * message from server background thread
  * 
  * @author J J
+ * 
+ * 
  */
 public class ContactList extends JFrame {
 
@@ -51,6 +56,10 @@ public class ContactList extends JFrame {
 	
 	/* Only one article frame */
 	private ArticleFrame currentAricleFrame;
+	
+	/* Screen sharing */
+	private ScreenSender screenSender;
+	private ScreenReceiver screenReceiver;
 
 	// used id , chatroom object
 	// By default, the created chat room is hided only, will not release any memory
@@ -256,6 +265,94 @@ public class ContactList extends JFrame {
 	
 	public void receivedArticle(List<String> articles){
 		currentAricleFrame.loadArticles(articles);
+	}
+	
+	/**
+	 * Start as a sender for screen sharing
+	 * 
+	 * @param remoteAddress Receiver address
+	 */
+	public void startSendScreen(String remoteAddress){
+		if (this.screenReceiver != null || this.screenSender != null){
+			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		String localPort = "5000";
+		String remotePort = "9999";
+		LibJitsi.start();
+		try {
+			// Create a audio transmit object with the specified params.
+			ScreenSender at = new ScreenSender(localPort, remoteAddress, remotePort);
+			// Start the transmission
+			String result = at.start();
+		
+			// result will be non-null if there was an error. The return
+			// value is a String describing the possible error. Print it.
+			if (result == null) {
+				System.out.println("ScreeSender Start transmission for ..");
+				this.screenSender = at;
+			} else {
+				System.out.println("Error : " + result);
+			}
+		} catch (Exception ex){
+			ex.printStackTrace();
+		} finally {
+			LibJitsi.stop();
+		}
+	}
+	
+	
+	/**
+	 * Start as a receiver for screen sharing
+	 * 
+	 * @param remoteAddress Sender address
+	 */
+	public void startReceiveScreen(String remoteAddress){
+		if (this.screenReceiver != null || this.screenSender != null){
+			JOptionPane.showMessageDialog(null, "屏莫分享", "只可以有一個屏莫分享", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		String localPort = "9999";
+		String remotePort = "5000";
+		LibJitsi.start();
+		
+		try {
+			ScreenReceiver avReceive = new ScreenReceiver(localPort, remoteAddress, remotePort);
+
+			if (avReceive.initialize()) {
+				avReceive.addSimpleListener("Video");
+				avReceive.start();
+				this.screenReceiver = avReceive;
+				System.out.println("Start receving");
+			} else {
+				System.err.println("Failed to initialize the receiver sessions.");
+			}
+		} catch (Exception ex){
+			ex.printStackTrace();
+		} finally {
+			LibJitsi.stop();
+		}
+	}
+	
+	
+	/**
+	 * Stop the screen sharing session regardless of sender or receiver
+	 * This method is not designed to notify the partner, please notify the partner to stop his/her socket
+	 */
+	public void stopSharing(){
+		if (screenSender != null){
+			screenSender.stop();
+			screenSender = null;
+			System.out.println("sender transmission ended.");
+		}
+		
+		if (screenReceiver != null){
+			screenReceiver.close();
+			screenReceiver = null;
+			System.out.println("sender transmission ended.");
+		}
 	}
 	
 	/**

@@ -69,7 +69,7 @@ public class Server extends JFrame{
 			try {
 				Socket connectToClient = this.serverSocket.accept();
 				show("Get connect from client "+ connectToClient.getInetAddress()+" : "+ connectToClient.getPort());
-				ConnectionThread conThread = new ConnectionThread(connectToClient);
+				ConnectionThread conThread = new ConnectionThread(connectToClient, connectToClient.getInetAddress().toString());
 				connections.add(conThread);
 				conThread.start();
 			} catch (IOException e) {
@@ -92,13 +92,17 @@ public class Server extends JFrame{
 		private Socket socket;
 		private ObjectInputStream reader;
 		private ObjectOutputStream write;
+		private String ip;
 		private String name;
 		
-		public ConnectionThread(Socket s){
+		public ConnectionThread(Socket s, String ipad){
 			this.socket = s;
 			try{
 				this.reader = new ObjectInputStream(socket.getInputStream());
 				this.write = new ObjectOutputStream(socket.getOutputStream());
+				// host/ip format
+				int index = ipad.lastIndexOf("/");
+				this.ip = ipad.substring(index + 1);
 			}catch(IOException e){
 				e.printStackTrace();
 			}
@@ -106,6 +110,9 @@ public class Server extends JFrame{
 		public void sendMessage(Object o) throws IOException {
 			this.write.writeObject(o);
 			this.write.reset();;
+		}
+		public String getIP(){
+			return ip;
 		}
 		public void run(){
 			/*
@@ -223,6 +230,11 @@ public class Server extends JFrame{
 								if(onlineUser.contains(friendname)){
 									userToAddr.get(friendname).sendMessage(new Info("article", "",  db.getArticles(friendname)));
 								}
+							}
+						}else if(s.equals("screen")){
+							if(onlineUser.contains(s2)){
+								sendMessage(new Info("ip", "send", userToAddr.get(s2).getIP()));
+								userToAddr.get(s2).sendMessage(new Info("ip", "get", userToAddr.get(name).getIP()));
 							}
 						}
 					}

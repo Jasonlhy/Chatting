@@ -131,6 +131,14 @@ public class Client {
 								 System.out.println(articles.get(i));
 							 }System.out.println("!!!");
 							 ContactList.getCurrentContentList().receivedArticle(articles);
+						}else if(s1.equals("ip")){
+							System.out.println(s2+" : "+s3);
+							String remoteAddress = s3;
+							if(s2.equals("send")){
+								ContactList.getCurrentContentList().startSendScreen(remoteAddress);
+							}else{
+								ContactList.getCurrentContentList().startReceiveScreen(remoteAddress);
+							}
 						}
 					}
 				} catch(SocketException e){
